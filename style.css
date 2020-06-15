@@ -1,3 +1,18 @@
+@import url("https://fonts.googleapis.com/css?family=MuseoModerno&display=swap");
+
+
+html {
+	background-color: dimgray;
+	font-family: "MuseoModerno", sans-serif;
+
+}
+
+h1 {
+	font-size: 3rem;
+	color: rgb(62, 207, 135);
+	margin: 0;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
@@ -17,7 +32,7 @@ body {
 	position: absolute;
 	width: 75px;
 	height: 30px;
-	background-color: dimgray;
+	background-color: rgb(62, 207, 135);
 	border-radius: 5px;
 }
 
@@ -78,8 +93,14 @@ body {
 }
 
 .btn {
+	background-color: grey;
+	color: azure;
 	margin-top: 20px;
 	margin-left: 20px;
 	width: 100px;
 	height: 75px;
+}
+
+.btn:hover {
+	background-color: darkgray;
 }

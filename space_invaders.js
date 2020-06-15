@@ -60,7 +60,7 @@
 		alertModalControl(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
-		document.getElementById("accuracy").innerText = "Accuracy: " + (destroyedEnemies / shotsFired) * 100 + "%";
+		document.getElementById("accuracy").innerText = "Accuracy: " + Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 	}
 
 	function fireLaser(laser, ship) {
@@ -112,13 +112,13 @@
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft + height + 75 >= test)) {
 			moveEnemyShipsDown();
 			lossChecker();
-			sleep(350 - 15 * shipSpeed).then(moveEnemyShipsLeft);
+			sleep(375 - 15 * shipSpeed).then(moveEnemyShipsLeft);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + height) + "px";
 		});
-		sleep(350 - 15 * shipSpeed).then(moveEnemyShipsRight);
+		sleep(375 - 15 * shipSpeed).then(moveEnemyShipsRight);
 	}
 
 	function moveEnemyShipsLeft() {
@@ -126,13 +126,13 @@
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft - height <= document.getElementById("gameBoard").offsetLeft)) {
 			moveEnemyShipsDown();
 			lossChecker();
-			sleep(350 - 15 * shipSpeed).then(moveEnemyShipsRight);
+			sleep(375 - 15 * shipSpeed).then(moveEnemyShipsRight);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - height) + "px";
 		});
-		sleep(350 - 15 * shipSpeed).then(moveEnemyShipsLeft);
+		sleep(375 - 15 * shipSpeed).then(moveEnemyShipsLeft);
 	}
 
 
