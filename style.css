@@ -30,7 +30,7 @@ body {
 
 .laser {
 	position: absolute;
-	width: 10px;
+	width: 7px;
 	height: 30px;
 	background-color: red;
 	border-radius: 5px;
@@ -72,8 +72,14 @@ body {
 	line-height: 15vh;
 }
 
-#start {
+#btns {
+	display: flex;
+	flex-direction: row;
+}
+
+.btn {
 	margin-top: 20px;
+	margin-left: 20px;
 	width: 100px;
 	height: 75px;
 }

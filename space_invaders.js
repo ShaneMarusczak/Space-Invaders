@@ -5,7 +5,10 @@
 	let gameOver = false;
 	let numberOfEnemies = 0;
 	let destroyedEnemies = 0;
+	let shotsFired = 0;
+	let shipSpeed = 1;
 	const height = 25;
+	const ship = document.getElementById("ship");
 
 	function alertModalControl(message, duration) {
 		document.getElementById("alertshader").style.display = "block";
@@ -21,7 +24,6 @@
 
 	function shipControl(e) {
 		if (gameStarted && !gameOver) {
-			const ship = document.getElementById("ship");
 			const posLeft = ship.offsetLeft - document.getElementById("gameBoard").offsetLeft - 1;
 			if (e.keyCode == "37" && posLeft - height >= 0) {
 				ship.style.marginLeft = (posLeft - height) + "px";
@@ -30,6 +32,7 @@
 				ship.style.marginLeft = (posLeft + height) + "px";
 				e.preventDefault();
 			} else if (e.keyCode == "32" && canFire) {
+				shotsFired++;
 				canFire = false;
 				sleep(500).then(() => {
 					canFire = true;
@@ -45,30 +48,34 @@
 		}
 	}
 
-	function colides(x1, y1, w1, h1, x2, y2, w2, h2) {
-		return !(x2 > w1 + x1 || x1 > w2 + x2 || y2 > h1 + y1 || y1 > h2 + y2);
+	function colides(obj1, obj2) {
+		return !(obj2.offsetLeft > obj1.offsetWidth + obj1.offsetLeft ||
+			obj1.offsetLeft > obj2.offsetWidth + obj2.offsetLeft ||
+			obj2.offsetTop > obj1.offsetHeight + obj1.offsetTop ||
+			obj1.offsetTop > obj2.offsetHeight + obj2.offsetTop);
 	}
 
-	function gameOverHandler() {
+	function gameOverHandler(message) {
 		gameOver = true;
-		alertModalControl("Game Over!", 2000);
+		alertModalControl(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
+		document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
+		document.getElementById("accuracy").innerText = "Accuracy: " + (destroyedEnemies / shotsFired) * 100 + "%";
 	}
 
 	function fireLaser(laser, ship) {
-		const interval = 200;
+		const interval = 175;
 		const iterations = 28;
 		for (let i = 0; i < iterations; i++) {
 			sleep(i * interval).then(() => {
 				laser.style.top = ship.offsetTop - height * 2 - (height * i) + "px";
 				Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
-					if (colides(es.offsetLeft, es.offsetTop, es.offsetWidth, es.offsetHeight,
-						laser.offsetLeft, laser.offsetTop, laser.offsetWidth, laser.offsetHeight)) {
+					if (colides(es, laser)) {
 						laser.remove();
 						es.remove();
 						destroyedEnemies++;
 						if (destroyedEnemies === numberOfEnemies) {
-							gameOverHandler();
+							gameOverHandler("You Win!");
 						}
 					}
 				});
@@ -86,6 +93,7 @@
 	}
 
 	function moveEnemyShipsDown() {
+		shipSpeed++;
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginTop = (Number(es.style.marginTop.substring(0, es.style.marginTop.length - 2)) + height) + "px";
 		});
@@ -93,30 +101,38 @@
 
 	const test = document.getElementById("gameBoard").offsetWidth + document.getElementById("gameBoard").offsetLeft;
 
+	function lossChecker() {
+		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetTop + 30 >= ship.offsetTop)) {
+			gameOverHandler("You Lose!");
+		}
+	}
+
 	function moveEnemyShipsRight() {
 		if (gameOver) return;
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft + height + 75 >= test)) {
 			moveEnemyShipsDown();
-			sleep(350).then(moveEnemyShipsLeft);
+			lossChecker();
+			sleep(350 - 15 * shipSpeed).then(moveEnemyShipsLeft);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + height) + "px";
 		});
-		sleep(350).then(moveEnemyShipsRight);
+		sleep(350 - 15 * shipSpeed).then(moveEnemyShipsRight);
 	}
 
 	function moveEnemyShipsLeft() {
 		if (gameOver) return;
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft - height <= document.getElementById("gameBoard").offsetLeft)) {
 			moveEnemyShipsDown();
-			sleep(350).then(moveEnemyShipsRight);
+			lossChecker();
+			sleep(350 - 15 * shipSpeed).then(moveEnemyShipsRight);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - height) + "px";
 		});
-		sleep(350).then(moveEnemyShipsLeft);
+		sleep(350 - 15 * shipSpeed).then(moveEnemyShipsLeft);
 	}
 
 
@@ -133,7 +149,6 @@
 		}
 		document.addEventListener("keydown", shipControl);
 		document.getElementById("start").addEventListener("click", startGame);
-
+		document.getElementById("reload").addEventListener("click", () => location.reload());
 	})();
-
 })();
