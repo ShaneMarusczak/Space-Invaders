@@ -134,12 +134,17 @@
 		});
 		sleep(375 - 15 * shipSpeed).then(moveEnemyShipsLeft);
 	}
-
+	const imageStore = ["images/enemy-4.png", "images/enemy-2.png", "images/enemy-3.png", "images/enemy-1.png"];
 
 	(() => {
 		for (let i = 1; i < 5; i++) {
+			const shipImgToUse = imageStore[i - 1];
 			for (let j = 1; j < 8; j++) {
 				const enemyShip = document.createElement("div");
+				const shipImg = document.createElement("img");
+				shipImg.src = shipImgToUse;
+				shipImg.classList.add("enemyShipImg");
+				enemyShip.appendChild(shipImg);
 				enemyShip.classList.add("enemyShip");
 				enemyShip.style.top = i * 60 + document.getElementById("gameBoard").offsetTop + "px";
 				enemyShip.style.left = j * 120 + document.getElementById("gameBoard").offsetLeft + "px";

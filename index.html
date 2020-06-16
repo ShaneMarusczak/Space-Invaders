@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="style.min.css" />
+	<link rel="stylesheet" type="text/css" href="static/style.min.css" />
 	<title>Space Invaders</title>
 	<meta name="Description" content="Play Space Invaders">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
@@ -22,7 +22,9 @@
 	</header>
 	<div id="gameBoard">
 		<div id="enemies"></div>
-		<div id="ship"></div>
+		<div id="ship">
+			<img id="playerShipImg" src="images/player-ship.png" />
+		</div>
 	</div>
 	<span id="shotsFired"></span>
 	<span id="accuracy"></span>
@@ -32,6 +34,6 @@
 	</div>
 
 </body>
-<script type="text/javascript" src="space_invaders.min.js"></script>
+<script type="text/javascript" src="scripts/space_invaders.min.js"></script>
 
 </html>
