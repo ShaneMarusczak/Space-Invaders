@@ -1,16 +1,49 @@
-@import url("https://fonts.googleapis.com/css?family=MuseoModerno&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Orbitron&display=swap");
 
 
 html {
-	background-color: dimgray;
-	font-family: "MuseoModerno", sans-serif;
+	background-color: gray;
+	font-family: "Orbitron", sans-serif;
 
 }
 
 h1 {
 	font-size: 3rem;
-	color: rgb(62, 207, 135);
+	color: darkblue;
 	margin: 0;
+	margin-bottom: 10px;
+}
+
+#githubicon {
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	right: 10vw;
+	top: 40px;
+	transition: 1.5s;
+	z-index: 0;
+	background-color: transparent;
+	border-radius: 30px;
+}
+
+#githubicon:hover {
+	transform: translateY(-5px);
+	background-color: dimgray;
+}
+
+#homeIcon {
+	position: absolute;
+	top: 40px;
+	left: 10vw;
+	width: 60px;
+	height: 60px;
+	transition: 1.5s;
+	z-index: 0;
+	background-color: transparent;
+}
+
+#homeIcon:hover {
+	transform: translateY(-5px);
 }
 
 body {
@@ -51,6 +84,10 @@ body {
 	width: 1000px;
 	height: 800px;
 	background-color: black;
+}
+
+.shadowBox {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .laser {
@@ -98,19 +135,27 @@ body {
 }
 
 #btns {
+	margin-top: 20px;
+	justify-content: space-between;
+	width: 300px;
 	display: flex;
 	flex-direction: row;
 }
 
-.btn {
-	background-color: grey;
-	color: azure;
-	margin-top: 20px;
-	margin-left: 20px;
-	width: 100px;
-	height: 75px;
+#btns>div {
+	color: darkblue;
+	font-size: 1.7em;
+	border-radius: 7px;
+	width: fit-content;
+	padding: 5px;
+	border: 1px solid black;
 }
 
-.btn:hover {
-	background-color: darkgray;
+#btns>div:hover {
+	background-color: dimgray;
+	cursor: pointer;
+}
+
+footer {
+	color: darkblue;
 }

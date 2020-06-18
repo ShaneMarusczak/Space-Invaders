@@ -19,8 +19,12 @@
 <body>
 	<header>
 		<h1>Space Invaders</h1>
+		<a id="homeLink" href="https://marusczak.com/Games-Home-Page" rel="noreferrer"><img id="homeIcon"
+				src="images/house-icon.png"></a>
+		<a id="gitHubLink" href="https://github.com/ShaneMarusczak/Space-Invaders" target="_blank" rel="noreferrer"><img
+				id="githubicon" src="images/github-icon.jpg"></a>
 	</header>
-	<div id="gameBoard">
+	<div id="gameBoard" class="shadowBox">
 		<div id="enemies"></div>
 		<div id="ship">
 			<img id="playerShipImg" src="images/player-ship.png" />
@@ -29,10 +33,12 @@
 	<span id="shotsFired"></span>
 	<span id="accuracy"></span>
 	<div id="btns">
-		<button id="start" class="btn">Start</button>
-		<button id="reload" class="btn">Start Over</button>
+		<div id="start" class="shadowBox">Start</div>
+		<div id="reload" class="shadowBox">Start Over</div>
 	</div>
-
+	<footer>
+		<p id="updateText">Last Updated: June 18, 2020</p>
+	</footer>
 </body>
 <script type="text/javascript" src="scripts/space_invaders.min.js"></script>
 

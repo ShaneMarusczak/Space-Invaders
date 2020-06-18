@@ -112,13 +112,13 @@
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft + height + 75 >= test)) {
 			moveEnemyShipsDown();
 			lossChecker();
-			sleep(375 - 15 * shipSpeed).then(moveEnemyShipsLeft);
+			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + height) + "px";
 		});
-		sleep(375 - 15 * shipSpeed).then(moveEnemyShipsRight);
+		sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
 	}
 
 	function moveEnemyShipsLeft() {
@@ -126,13 +126,13 @@
 		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft - height <= document.getElementById("gameBoard").offsetLeft)) {
 			moveEnemyShipsDown();
 			lossChecker();
-			sleep(375 - 15 * shipSpeed).then(moveEnemyShipsRight);
+			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
 			return;
 		}
 		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
 			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - height) + "px";
 		});
-		sleep(375 - 15 * shipSpeed).then(moveEnemyShipsLeft);
+		sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
 	}
 	const imageStore = ["images/enemy-4.png", "images/enemy-2.png", "images/enemy-3.png", "images/enemy-1.png"];
 
