@@ -110,7 +110,7 @@
 			gameOverHandler("You Lose!");
 		} else if (laser.offsetTop >= ship.offsetTop) {
 			laser.remove();
-			if (shouldReFire) {
+			if (shouldReFire && !gameOver) {
 				sleep(randomIntFromInterval(350, 550)).then(() => {
 					fireComputerLaser(shouldReFire);
 				});
