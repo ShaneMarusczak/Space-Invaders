@@ -9,6 +9,14 @@
 	let shipSpeed = 1;
 	const height = 25;
 	const ship = document.getElementById("ship");
+	const gameBoard = document.getElementById("gameBoard");
+	const enemyShips = () => Array.from(document.getElementsByClassName("enemyShip"));
+
+	const convertToPXs = (num) => num + "px";
+
+	function randomIntFromInterval(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
 
 	function alertModalControl(message, duration) {
 		document.getElementById("alertshader").style.display = "block";
@@ -24,26 +32,26 @@
 
 	function shipControl(e) {
 		if (gameStarted && !gameOver) {
-			const posLeft = ship.offsetLeft - document.getElementById("gameBoard").offsetLeft - 1;
+			const posLeft = ship.offsetLeft - gameBoard.offsetLeft - 1;
 			if (e.keyCode == "37" && posLeft - height >= 0) {
-				ship.style.marginLeft = (posLeft - height) + "px";
 				e.preventDefault();
-			} else if (e.keyCode == "39" && posLeft + height <= (document.getElementById("gameBoard").offsetWidth) - 100) {
-				ship.style.marginLeft = (posLeft + height) + "px";
+				ship.style.marginLeft = convertToPXs(posLeft - height);
+			} else if (e.keyCode == "39" && posLeft + height <= (gameBoard.offsetWidth) - 100) {
 				e.preventDefault();
+				ship.style.marginLeft = convertToPXs(posLeft + height);
 			} else if (e.keyCode == "32" && canFire) {
+				e.preventDefault();
 				shotsFired++;
 				canFire = false;
-				sleep(500).then(() => {
+				sleep(550).then(() => {
 					canFire = true;
 				});
 				const laser = document.createElement("div");
 				laser.classList.add("laser");
-				laser.style.left = ship.offsetLeft + 45 + "px";
-				laser.style.top = ship.offsetTop - 30 + "px";
+				laser.style.left = convertToPXs(ship.offsetLeft + 45);
+				laser.style.top = convertToPXs(ship.offsetTop - 30);
 				ship.appendChild(laser);
-				fireLaser(laser, ship);
-				e.preventDefault();
+				firePlayerLaser(laser, ship);
 			}
 		}
 	}
@@ -59,17 +67,18 @@
 		gameOver = true;
 		alertModalControl(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
+		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
 		document.getElementById("accuracy").innerText = "Accuracy: " + Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 	}
 
-	function fireLaser(laser, ship) {
+	function firePlayerLaser(laser, ship) {
 		const interval = 175;
 		const iterations = 28;
 		for (let i = 0; i < iterations; i++) {
 			sleep(i * interval).then(() => {
-				laser.style.top = ship.offsetTop - height * 2 - (height * i) + "px";
-				Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
+				laser.style.top = convertToPXs(ship.offsetTop - height * 2 - (height * i));
+				enemyShips().forEach(es => {
 					if (colides(es, laser)) {
 						laser.remove();
 						es.remove();
@@ -84,55 +93,93 @@
 		sleep(iterations * interval).then(() => laser.remove());
 	}
 
+	function fireComputerLaser(shouldReFire) {
+		const laser = document.createElement("div");
+		laser.classList.add("enemyLaser");
+		const shipToFire = enemyShips()[randomIntFromInterval(0, enemyShips().length - 1)];
+		document.getElementById("enemies").appendChild(laser);
+		laser.style.left = convertToPXs(Number(shipToFire.style.left.substring(0, shipToFire.style.left.length - 2)) + Number(shipToFire.style.marginLeft.substring(0, shipToFire.style.marginLeft.length - 2)));
+		laser.style.top = convertToPXs(Number(shipToFire.style.top.substring(0, shipToFire.style.top.length - 2)) + Number(shipToFire.style.marginTop.substring(0, shipToFire.style.marginTop.length - 2)));
+		moveComputerLaser(laser, shouldReFire);
+	}
+
+	function moveComputerLaser(laser, shouldReFire) {
+		if (colides(ship, laser)) {
+			ship.remove();
+			laser.remove();
+			gameOverHandler("You Lose!");
+		} else if (laser.offsetTop >= ship.offsetTop) {
+			laser.remove();
+			if (shouldReFire) {
+				sleep(randomIntFromInterval(350, 550)).then(() => {
+					fireComputerLaser(shouldReFire);
+				});
+			}
+		} else {
+			sleep(200).then(() => {
+				laser.style.marginTop = convertToPXs(Number(laser.style.marginTop.substring(0, laser.style.marginTop.length - 2)) + height);
+				moveComputerLaser(laser, shouldReFire);
+			});
+		}
+	}
+
 	function startGame() {
 		if (!gameStarted) {
 			alertModalControl("Start!", 1500);
 			gameStarted = true;
-			sleep(1500).then(moveEnemyShipsRight);
+			sleep(1500).then(() => {
+				moveEnemyShipsRight();
+				fireComputerLaser(true);
+			});
 		}
 	}
 
 	function moveEnemyShipsDown() {
+		if (randomIntFromInterval(0, 4) === 4) {
+			fireComputerLaser(false);
+		}
 		shipSpeed++;
-		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
-			es.style.marginTop = (Number(es.style.marginTop.substring(0, es.style.marginTop.length - 2)) + height) + "px";
+		enemyShips().forEach(es => {
+			es.style.marginTop = convertToPXs(Number(es.style.marginTop.substring(0, es.style.marginTop.length - 2)) + height);
 		});
 	}
 
-	const test = document.getElementById("gameBoard").offsetWidth + document.getElementById("gameBoard").offsetLeft;
+	const gameBoardRightSide = gameBoard.offsetWidth + gameBoard.offsetLeft;
 
 	function lossChecker() {
-		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetTop + 30 >= ship.offsetTop)) {
+		if (enemyShips().some(es => es.offsetTop + 30 >= ship.offsetTop)) {
 			gameOverHandler("You Lose!");
 		}
 	}
 
 	function moveEnemyShipsRight() {
-		if (gameOver) return;
-		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft + height + 75 >= test)) {
-			moveEnemyShipsDown();
-			lossChecker();
-			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
-			return;
+		if (!gameOver) {
+			if (enemyShips().some(es => es.offsetLeft + height + 75 >= gameBoardRightSide)) {
+				moveEnemyShipsDown();
+				lossChecker();
+				sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
+				return;
+			}
+			enemyShips().forEach(es => {
+				es.style.marginLeft = convertToPXs(Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + height);
+			});
+			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
 		}
-		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
-			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + height) + "px";
-		});
-		sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
 	}
 
 	function moveEnemyShipsLeft() {
-		if (gameOver) return;
-		if (Array.from(document.getElementsByClassName("enemyShip")).some(es => es.offsetLeft - height <= document.getElementById("gameBoard").offsetLeft)) {
-			moveEnemyShipsDown();
-			lossChecker();
-			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
-			return;
+		if (!gameOver) {
+			if (enemyShips().some(es => es.offsetLeft - height <= gameBoard.offsetLeft)) {
+				moveEnemyShipsDown();
+				lossChecker();
+				sleep(375 - 14 * shipSpeed).then(moveEnemyShipsRight);
+				return;
+			}
+			enemyShips().forEach(es => {
+				es.style.marginLeft = convertToPXs(Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - height);
+			});
+			sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
 		}
-		Array.from(document.getElementsByClassName("enemyShip")).forEach(es => {
-			es.style.marginLeft = (Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - height) + "px";
-		});
-		sleep(375 - 14 * shipSpeed).then(moveEnemyShipsLeft);
 	}
 	const imageStore = ["images/enemy-4.png", "images/enemy-2.png", "images/enemy-3.png", "images/enemy-1.png"];
 
@@ -146,8 +193,8 @@
 				shipImg.classList.add("enemyShipImg");
 				enemyShip.appendChild(shipImg);
 				enemyShip.classList.add("enemyShip");
-				enemyShip.style.top = i * 60 + document.getElementById("gameBoard").offsetTop + "px";
-				enemyShip.style.left = j * 120 + document.getElementById("gameBoard").offsetLeft + "px";
+				enemyShip.style.top = convertToPXs(i * 60 + document.getElementById("gameBoard").offsetTop);
+				enemyShip.style.left = convertToPXs(j * 120 + document.getElementById("gameBoard").offsetLeft);
 				document.getElementById("enemies").appendChild(enemyShip);
 				numberOfEnemies++;
 			}

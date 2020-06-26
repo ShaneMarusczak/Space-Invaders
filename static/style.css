@@ -54,6 +54,7 @@ body {
 }
 
 #playerShipImg {
+	margin-top: -10px;
 	width: 100px;
 	height: 50px;
 }
@@ -67,6 +68,7 @@ body {
 }
 
 .enemyShipImg {
+	margin-top: -5px;
 	width: 75px;
 	height: 50px;
 }
@@ -95,6 +97,14 @@ body {
 	width: 7px;
 	height: 30px;
 	background-color: red;
+	border-radius: 5px;
+}
+
+.enemyLaser {
+	position: absolute;
+	width: 8px;
+	height: 25px;
+	background-color: green;
 	border-radius: 5px;
 }
 
