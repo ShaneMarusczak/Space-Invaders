@@ -9,6 +9,8 @@
 	let shipSpeed = 1;
 	let movingRight = true;
 	let justMovedDown = false;
+	const playerWinsOnLoad = Number(getCookie("playerWinsSpace"));
+	const playerLossesOnLoad = Number(getCookie("playerLossesSpace"));
 	const clockSpeed = 375;
 	const playerLaserInterval = 175;
 	const playerLaserIterations = 28;
@@ -32,6 +34,29 @@
 		sleep(duration).then(() => {
 			document.getElementById("alertshader").style.display = "none";
 		});
+	}
+
+	function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		var expires = "expires=" + d.toUTCString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+
+	function getCookie(cname) {
+		var name = cname + "=";
+		var decodedCookie = decodeURIComponent(document.cookie);
+		var ca = decodedCookie.split(";");
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == " ") {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
 	}
 
 	function shipControl(e) {
@@ -77,6 +102,9 @@
 						destroyedEnemies++;
 						if (destroyedEnemies === numberOfEnemies) {
 							gameOverHandler("You Win!");
+							setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
+							document.getElementById("playerWins").innerText = "Wins: " + (playerWinsOnLoad + 1);
+
 						}
 					}
 				});
@@ -102,6 +130,8 @@
 			ship.remove();
 			laser.remove();
 			gameOverHandler("You Lose!");
+			setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
 		} else if (laser.offsetTop >= ship.offsetTop) {
 			laser.remove();
 			if (shouldReFire && !gameOver) {
@@ -131,6 +161,8 @@
 	function lossChecker() {
 		if (enemyShips().some(es => es.offsetTop + 30 >= ship.offsetTop)) {
 			gameOverHandler("You Lose!");
+			setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
 		}
 	}
 
@@ -139,8 +171,10 @@
 		alertModalControl(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
-		document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
-		document.getElementById("accuracy").innerText = "Accuracy: " + Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
+		if (shotsFired > 0) {
+			document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
+			document.getElementById("accuracy").innerText = "Accuracy: " + Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
+		}
 	}
 
 	function gameTick() {
@@ -208,5 +242,8 @@
 		document.addEventListener("keydown", shipControl);
 		document.getElementById("start").addEventListener("click", startGame);
 		document.getElementById("reload").addEventListener("click", () => location.reload());
+		document.getElementById("playerWins").innerText = "Wins: " + playerWinsOnLoad;
+		document.getElementById("playerLosses").innerText = "Losses: " + playerLossesOnLoad;
+
 	})();
 })();
