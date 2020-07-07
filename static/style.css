@@ -7,6 +7,11 @@ html {
 
 }
 
+#myCanvas {
+	display: none;
+	position: absolute;
+}
+
 h1 {
 	font-size: 3rem;
 	color: darkblue;

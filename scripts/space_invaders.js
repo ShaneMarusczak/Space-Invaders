@@ -104,6 +104,7 @@
 							gameOverHandler("You Win!");
 							setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
 							document.getElementById("playerWins").innerText = "Wins: " + (playerWinsOnLoad + 1);
+							document.getElementById("myCanvas").style.display = "block";
 
 						}
 					}
