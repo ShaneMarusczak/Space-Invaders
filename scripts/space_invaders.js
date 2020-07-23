@@ -115,7 +115,7 @@
 
 	function startGame() {
 		if (!gameStarted) {
-			window.alertModalControl("Start!", 1500);
+			window.modal("Start!", 1500);
 			window.sleep(1500).then(() => {
 				gameStarted = true;
 				gameTick();
@@ -134,7 +134,7 @@
 
 	function gameOverHandler(message) {
 		gameOver = true;
-		window.alertModalControl(message, 2000);
+		window.modal(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		if (shotsFired > 0) {
