@@ -9,8 +9,8 @@
 	let shipSpeed = 1;
 	let movingRight = true;
 	let justMovedDown = false;
-	const playerWinsOnLoad = Number(getCookie("playerWinsSpace"));
-	const playerLossesOnLoad = Number(getCookie("playerLossesSpace"));
+	const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
+	const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
 	const clockSpeed = 375;
 	const playerLaserInterval = 175;
 	const playerLaserIterations = 28;
@@ -23,41 +23,6 @@
 	const enemyShips = () => Array.from(document.getElementsByClassName("enemyShip"));
 
 	const convertToPXs = (num) => num + "px";
-
-	const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-	const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-	function alertModalControl(message, duration) {
-		document.getElementById("alertshader").style.display = "block";
-		document.getElementById("alertmessage").innerText = message;
-		sleep(duration).then(() => {
-			document.getElementById("alertshader").style.display = "none";
-		});
-	}
-
-	function setCookie(cname, cvalue, exdays) {
-		var d = new Date();
-		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-		var expires = "expires=" + d.toUTCString();
-		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-	}
-
-	function getCookie(cname) {
-		var name = cname + "=";
-		var decodedCookie = decodeURIComponent(document.cookie);
-		var ca = decodedCookie.split(";");
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == " ") {
-				c = c.substring(1);
-			}
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-	}
 
 	function shipControl(e) {
 		if (gameStarted && !gameOver) {
@@ -72,7 +37,7 @@
 				e.preventDefault();
 				shotsFired++;
 				canFire = false;
-				sleep(550).then(() => {
+				window.sleep(550).then(() => {
 					canFire = true;
 				});
 				firePlayerLaser();
@@ -93,7 +58,7 @@
 		laser.style.top = convertToPXs(ship.offsetTop - 30);
 		ship.appendChild(laser);
 		for (let i = 0; i < playerLaserIterations; i++) {
-			sleep(i * playerLaserInterval).then(() => {
+			window.sleep(i * playerLaserInterval).then(() => {
 				laser.style.top = convertToPXs(ship.offsetTop - tickMovement * 2 - (tickMovement * i));
 				enemyShips().forEach(es => {
 					if (colides(es, laser)) {
@@ -102,7 +67,7 @@
 						destroyedEnemies++;
 						if (destroyedEnemies === numberOfEnemies) {
 							gameOverHandler("You Win!");
-							setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
+							window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
 							document.getElementById("playerWins").innerText = "Wins: " + (playerWinsOnLoad + 1);
 							document.getElementById("myCanvas").style.display = "block";
 
@@ -111,14 +76,14 @@
 				});
 			});
 		}
-		sleep(playerLaserIterations * playerLaserInterval).then(() => laser.remove());
+		window.sleep(playerLaserIterations * playerLaserInterval).then(() => laser.remove());
 	}
 
 	function fireComputerLaser(shouldReFire) {
 		if (!gameOver) {
 			const laser = document.createElement("div");
 			laser.classList.add("enemyLaser");
-			const shipToFire = enemyShips()[randomIntFromInterval(0, enemyShips().length - 1)];
+			const shipToFire = enemyShips()[window.randomIntFromInterval(0, enemyShips().length - 1)];
 			document.getElementById("enemies").appendChild(laser);
 			laser.style.left = convertToPXs(33.5 + Number(shipToFire.style.left.substring(0, shipToFire.style.left.length - 2)) + Number(shipToFire.style.marginLeft.substring(0, shipToFire.style.marginLeft.length - 2)));
 			laser.style.top = convertToPXs(40 + Number(shipToFire.style.top.substring(0, shipToFire.style.top.length - 2)) + Number(shipToFire.style.marginTop.substring(0, shipToFire.style.marginTop.length - 2)));
@@ -131,17 +96,17 @@
 			ship.remove();
 			laser.remove();
 			gameOverHandler("You Lose!");
-			setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
 			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
 		} else if (laser.offsetTop >= ship.offsetTop) {
 			laser.remove();
 			if (shouldReFire && !gameOver) {
-				sleep(randomIntFromInterval(350, 550)).then(() => {
+				window.sleep(window.randomIntFromInterval(350, 550)).then(() => {
 					fireComputerLaser(shouldReFire);
 				});
 			}
 		} else {
-			sleep(200).then(() => {
+			window.sleep(200).then(() => {
 				laser.style.marginTop = convertToPXs(Number(laser.style.marginTop.substring(0, laser.style.marginTop.length - 2)) + tickMovement);
 				moveComputerLaser(laser, shouldReFire);
 			});
@@ -150,8 +115,8 @@
 
 	function startGame() {
 		if (!gameStarted) {
-			alertModalControl("Start!", 1500);
-			sleep(1500).then(() => {
+			window.alertModalControl("Start!", 1500);
+			window.sleep(1500).then(() => {
 				gameStarted = true;
 				gameTick();
 				fireComputerLaser(true);
@@ -162,14 +127,14 @@
 	function lossChecker() {
 		if (enemyShips().some(es => es.offsetTop + 30 >= ship.offsetTop)) {
 			gameOverHandler("You Lose!");
-			setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
 			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
 		}
 	}
 
 	function gameOverHandler(message) {
 		gameOver = true;
-		alertModalControl(message, 2000);
+		window.alertModalControl(message, 2000);
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		if (shotsFired > 0) {
@@ -189,12 +154,12 @@
 			} else {
 				moveEnemyShips();
 			}
-			if (randomIntFromInterval(1, 15) === 15) {
+			if (window.randomIntFromInterval(1, 15) === 15) {
 				fireComputerLaser(false);
 			}
 			lossChecker();
 			if (!gameOver) {
-				sleep(clockSpeed - 14 * shipSpeed).then(() => gameTick());
+				window.sleep(clockSpeed - 14 * shipSpeed).then(() => gameTick());
 			}
 		}
 	}
