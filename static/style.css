@@ -124,41 +124,9 @@ body {
 	height: 740px;
 }
 
-
-#alertshader {
-	z-index: 1;
-	display: none;
-	position: fixed;
-	padding: 0;
-	margin: 0;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.6);
-}
-
-#alert {
-	text-align: center;
-	border-radius: 5px;
-	box-shadow: inset 0px 0px 0px 4px black;
-	margin-left: 40vw;
-	margin-top: 10vh;
-	background-color: azure;
-	width: 350px;
-	height: 15vh;
-}
-
-#alertmessage {
-	vertical-align: middle;
-	font-size: xx-large;
-	line-height: 15vh;
-}
-
 #btns {
 	margin-top: 20px;
-	justify-content: space-between;
-	width: 300px;
+	width: 350px;
 	display: flex;
 	flex-direction: row;
 }
@@ -170,11 +138,16 @@ body {
 	width: fit-content;
 	padding: 5px;
 	border: 1px solid black;
+	margin-right: 30px;
 }
 
 #btns>div:hover {
 	background-color: dimgray;
 	cursor: pointer;
+}
+
+#updateText {
+	margin-left: 20px;
 }
 
 footer {
