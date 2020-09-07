@@ -142,14 +142,12 @@
 
 	function gameTick() {
 		if (!gameOver) {
-			if (enemiesOnLeftEdge() && !justMovedDown) {
-				moveEnemyShipsDown();
-				horizontalDirection = 1;
-			} else if (enemiesOnRightEdge() && !justMovedDown) {
-				moveEnemyShipsDown();
-				horizontalDirection = -1;
+			if (enemiesInColumn("0") && !justMovedDown) {
+				moveDownHelper(1);
+			} else if (enemiesInColumn("46") && !justMovedDown) {
+				moveDownHelper(-1);
 			} else {
-				moveEnemyShips(horizontalDirection);
+				moveEnemyShips("hor", horizontalDirection);
 				justMovedDown = false;
 			}
 			if (window.randomIntFromInterval(1, 15) === 15) {
@@ -162,29 +160,23 @@
 		}
 	}
 
-	const enemiesOnRightEdge = () => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === "46");
+	const enemiesInColumn = (col) => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === col);
 
-	const enemiesOnLeftEdge = () => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === "0");
-
-	function moveEnemyShipsDown() {
-		shipSpeed++;
-		enemyShips().forEach(es => {
-			const row = Number(es.attributes.currentCell.value.split("-")[0]);
-			const col = Number(es.attributes.currentCell.value.split("-")[1]);
-			const ship = es.parentElement.removeChild(es);
-			ship.attributes.currentCell.value = (row + 1) + "-" + col;
-			document.getElementById("cell-" + (row + 1) + "-" + col).appendChild(ship);
-		});
+	const moveDownHelper = (localHorizontalDirection) => {
+		moveEnemyShips("ver", 1);
 		justMovedDown = true;
-	}
+		shipSpeed++;
+		horizontalDirection = localHorizontalDirection;
+	};
 
-	function moveEnemyShips(direction) {
+	function moveEnemyShips(direction, distance) {
 		enemyShips().forEach(es => {
 			const row = Number(es.attributes.currentCell.value.split("-")[0]);
 			const col = Number(es.attributes.currentCell.value.split("-")[1]);
 			const ship = es.parentElement.removeChild(es);
-			ship.attributes.currentCell.value = row + "-" + (col + direction);
-			document.getElementById("cell-" + row + "-" + (col + direction)).appendChild(ship);
+			const newCell = direction === "hor" ? row + "-" + (col + distance) : (row + distance) + "-" + col;
+			ship.attributes.currentCell.value = newCell;
+			document.getElementById("cell-" + newCell).appendChild(ship);
 		});
 	}
 
