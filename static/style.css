@@ -30,18 +30,22 @@ h1 {
 	height: 60px;
 	position: absolute;
 	right: 10vw;
-	top: 15px;
+	top: 40px;
 	transition: 1.5s;
 	z-index: 0;
 	background-color: transparent;
 	border-radius: 30px;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (max-width: 1450px) {
 
 	#githubicon,
 	#homeIcon {
-		top: 40px !important;
+		top: 15px !important;
+	}
+
+	#winLoss {
+		display: none;
 	}
 }
 
@@ -52,7 +56,7 @@ h1 {
 
 #homeIcon {
 	position: absolute;
-	top: 15px;
+	top: 40px;
 	left: 10vw;
 	width: 60px;
 	height: 60px;
