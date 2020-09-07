@@ -7,7 +7,7 @@
 	let destroyedEnemies = 0;
 	let shotsFired = 0;
 	let shipSpeed = 1;
-	let movingRight = true;
+	let horizontalDirection = 1;
 	let justMovedDown = false;
 	const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
 	const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
@@ -144,16 +144,12 @@
 		if (!gameOver) {
 			if (enemiesOnLeftEdge() && !justMovedDown) {
 				moveEnemyShipsDown();
-				movingRight = true;
+				horizontalDirection = 1;
 			} else if (enemiesOnRightEdge() && !justMovedDown) {
 				moveEnemyShipsDown();
-				movingRight = false;
+				horizontalDirection = -1;
 			} else {
-				if (movingRight) {
-					moveEnemyShips(1);
-				} else {
-					moveEnemyShips(-1);
-				}
+				moveEnemyShips(horizontalDirection);
 				justMovedDown = false;
 			}
 			if (window.randomIntFromInterval(1, 15) === 15) {
