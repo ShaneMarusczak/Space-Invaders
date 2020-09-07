@@ -162,11 +162,11 @@
 
 	const enemiesInColumn = (col) => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === col);
 
-	const moveDownHelper = (localHorizontalDirection) => {
+	const moveDownHelper = (newHorizontalDirection) => {
 		moveEnemyShips("ver", 1);
 		justMovedDown = true;
 		shipSpeed++;
-		horizontalDirection = localHorizontalDirection;
+		horizontalDirection = newHorizontalDirection;
 	};
 
 	function moveEnemyShips(direction, distance) {
