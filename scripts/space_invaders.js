@@ -18,7 +18,6 @@
 	const imageStore = ["images/enemy-4.png", "images/enemy-2.png", "images/enemy-3.png", "images/enemy-1.png"];
 	const ship = document.getElementById("ship");
 	const gameBoard = document.getElementById("gameBoard");
-	const gameBoardRightSide = gameBoard.offsetWidth + gameBoard.offsetLeft;
 
 	const enemyShips = () => Array.from(document.getElementsByClassName("enemyShip"));
 
@@ -83,10 +82,8 @@
 		if (!gameOver) {
 			const laser = document.createElement("div");
 			laser.classList.add("enemyLaser");
-			const shipToFire = enemyShips()[window.randomIntFromInterval(0, enemyShips().length - 1)];
-			document.getElementById("enemies").appendChild(laser);
-			laser.style.left = convertToPXs(33.5 + Number(shipToFire.style.left.substring(0, shipToFire.style.left.length - 2)) + Number(shipToFire.style.marginLeft.substring(0, shipToFire.style.marginLeft.length - 2)));
-			laser.style.top = convertToPXs(40 + Number(shipToFire.style.top.substring(0, shipToFire.style.top.length - 2)) + Number(shipToFire.style.marginTop.substring(0, shipToFire.style.marginTop.length - 2)));
+			const cell = enemyShips()[window.randomIntFromInterval(0, enemyShips().length - 1)].attributes.currentCell.value;
+			document.getElementById("cell-" + cell).appendChild(laser);
 			moveComputerLaser(laser, shouldReFire);
 		}
 	}
@@ -125,7 +122,7 @@
 	}
 
 	function lossChecker() {
-		if (enemyShips().some(es => es.offsetTop + 30 >= ship.offsetTop)) {
+		if (enemyShips().some(es => colides(es, ship) || es.attributes.currentCell.value.split("-")[0] === "30")) {
 			gameOverHandler("You Lose!");
 			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
 			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
@@ -152,44 +149,66 @@
 				moveEnemyShipsDown();
 				movingRight = false;
 			} else {
-				moveEnemyShips();
+				if (movingRight) {
+					moveEnemyShips(1);
+				} else {
+					moveEnemyShips(-1);
+				}
+				justMovedDown = false;
 			}
 			if (window.randomIntFromInterval(1, 15) === 15) {
 				fireComputerLaser(false);
 			}
 			lossChecker();
 			if (!gameOver) {
-				window.sleep(clockSpeed - 14 * shipSpeed).then(() => gameTick());
+				window.sleep(clockSpeed - (16 * shipSpeed)).then(() => gameTick());
 			}
 		}
 	}
 
-	const enemiesOnRightEdge = () => enemyShips().some(es => es.offsetLeft + tickMovement + 75 >= gameBoardRightSide);
+	const enemiesOnRightEdge = () => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === "46");
 
-	const enemiesOnLeftEdge = () => enemyShips().some(es => es.offsetLeft - tickMovement <= gameBoard.offsetLeft);
+	const enemiesOnLeftEdge = () => enemyShips().some(es => es.attributes.currentCell.value.split("-")[1] === "0");
 
 	function moveEnemyShipsDown() {
 		shipSpeed++;
 		enemyShips().forEach(es => {
-			es.style.marginTop = convertToPXs(Number(es.style.marginTop.substring(0, es.style.marginTop.length - 2)) + tickMovement);
+			const row = Number(es.attributes.currentCell.value.split("-")[0]);
+			const col = Number(es.attributes.currentCell.value.split("-")[1]);
+			const ship = es.parentElement.removeChild(es);
+			ship.attributes.currentCell.value = (row + 1) + "-" + col;
+			document.getElementById("cell-" + (row + 1) + "-" + col).appendChild(ship);
 		});
 		justMovedDown = true;
 	}
 
-	function moveEnemyShips() {
-		if (movingRight) {
-			enemyShips().forEach(es => {
-				es.style.marginLeft = convertToPXs(Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) + tickMovement);
-			});
-		} else {
-			enemyShips().forEach(es => {
-				es.style.marginLeft = convertToPXs(Number(es.style.marginLeft.substring(0, es.style.marginLeft.length - 2)) - tickMovement);
-			});
-		}
-		justMovedDown = false;
+	function moveEnemyShips(direction) {
+		enemyShips().forEach(es => {
+			const row = Number(es.attributes.currentCell.value.split("-")[0]);
+			const col = Number(es.attributes.currentCell.value.split("-")[1]);
+			const ship = es.parentElement.removeChild(es);
+			ship.attributes.currentCell.value = row + "-" + (col + direction);
+			document.getElementById("cell-" + row + "-" + (col + direction)).appendChild(ship);
+		});
 	}
 
 	(() => {
+
+		const enemies = document.getElementById("enemies");
+
+		for (let i = 0; i < 32; i++) {
+			const shipRow = document.createElement("div");
+			enemies.appendChild(shipRow);
+			shipRow.classList.add("ship-row");
+			shipRow.id = "row-" + i;
+			for (let j = 0; j < 50; j++) {
+				const shipCell = document.createElement("div");
+				shipRow.appendChild(shipCell);
+				shipCell.classList.add("ship-cell");
+				shipCell.id = "cell-" + i + "-" + j;
+			}
+		}
+
 		for (let i = 1; i < 5; i++) {
 			const shipImgToUse = imageStore[i - 1];
 			for (let j = 1; j < 8; j++) {
@@ -199,12 +218,12 @@
 				shipImg.classList.add("enemyShipImg");
 				enemyShip.appendChild(shipImg);
 				enemyShip.classList.add("enemyShip");
-				enemyShip.style.top = convertToPXs(i * 60 + document.getElementById("gameBoard").offsetTop);
-				enemyShip.style.left = convertToPXs(j * 120 + document.getElementById("gameBoard").offsetLeft);
-				document.getElementById("enemies").appendChild(enemyShip);
+				document.getElementById("cell-" + (3 * i) + "-" + (6 * j)).appendChild(enemyShip);
+				enemyShip.setAttribute("currentCell", (3 * i) + "-" + (6 * j));
 				numberOfEnemies++;
 			}
 		}
+
 		document.addEventListener("keydown", shipControl);
 		document.getElementById("start").addEventListener("click", startGame);
 		document.getElementById("reload").addEventListener("click", () => location.reload());
