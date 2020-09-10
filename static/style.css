@@ -1,5 +1,35 @@
 @import url("https://fonts.googleapis.com/css?family=Orbitron&display=swap");
 
+@keyframes flash {
+	0% {
+		opacity: 0;
+	}
+
+	25% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	75% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+
+	}
+}
+
+#upgradeText {
+	color: red;
+}
+
+.flash {
+	animation: flash 5s;
+}
 
 html {
 	background-color: gray;
@@ -161,15 +191,12 @@ body {
 	padding: 5px;
 	border: 1px solid black;
 	margin-right: 30px;
+	transition: 500ms;
 }
 
 #btns>div:hover {
 	background-color: dimgray;
 	cursor: pointer;
-}
-
-#updateText {
-	margin-left: 20px;
 }
 
 footer {

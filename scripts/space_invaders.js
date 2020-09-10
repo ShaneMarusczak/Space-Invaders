@@ -9,10 +9,13 @@
 	let shipSpeed = 1;
 	let horizontalDirection = 1;
 	let justMovedDown = false;
+	let playerLaserInterval = 175;
+	let cantFireInterval = 550;
+	let upgradedLaser = false;
+	let hitsInARow = 0;
 	const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
 	const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
 	const clockSpeed = 375;
-	const playerLaserInterval = 175;
 	const playerLaserIterations = 28;
 	const tickMovement = 25;
 	const imageStore = ["images/enemy-4.png", "images/enemy-2.png", "images/enemy-3.png", "images/enemy-1.png"];
@@ -36,7 +39,7 @@
 				e.preventDefault();
 				shotsFired++;
 				canFire = false;
-				window.sleep(550).then(() => {
+				window.sleep(cantFireInterval).then(() => {
 					canFire = true;
 				});
 				firePlayerLaser();
@@ -64,6 +67,7 @@
 						laser.remove();
 						es.remove();
 						destroyedEnemies++;
+						hitsInARow++;
 						if (destroyedEnemies === numberOfEnemies) {
 							gameOverHandler("You Win!");
 							window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
@@ -75,7 +79,12 @@
 				});
 			});
 		}
-		window.sleep(playerLaserIterations * playerLaserInterval).then(() => laser.remove());
+		window.sleep(playerLaserIterations * playerLaserInterval).then(() => {
+			if (laser) {
+				hitsInARow = 0;
+				laser.remove();
+			}
+		});
 	}
 
 	function fireComputerLaser(shouldReFire) {
@@ -140,6 +149,16 @@
 		}
 	}
 
+	function upgradeTextControl(message) {
+		const upgradeText = document.getElementById("upgradeText");
+		upgradeText.innerText = message;
+		upgradeText.classList.add("flash");
+		window.sleep(4950).then(() => {
+			upgradeText.classList.remove("flash");
+			upgradeText.innerText = "";
+		});
+	}
+
 	function gameTick() {
 		if (!gameOver) {
 			if (enemiesInColumn("0") && !justMovedDown) {
@@ -152,6 +171,17 @@
 			}
 			if (window.randomIntFromInterval(1, 15) === 15) {
 				fireComputerLaser(false);
+			}
+			if ((shotsFired === 10 || shotsFired === 20) && destroyedEnemies / shotsFired > 0.65 && !upgradedLaser) {
+				upgradeTextControl("Laser Upgraded!");
+				cantFireInterval = 500;
+				playerLaserInterval = 150;
+				upgradedLaser = true;
+			}
+			if (hitsInARow === 10) {
+				upgradeTextControl("Enemies Retreat!");
+				moveEnemyShips("ver", -1);
+				hitsInARow = 0;
 			}
 			lossChecker();
 			if (!gameOver) {
