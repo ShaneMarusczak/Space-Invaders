@@ -80,7 +80,7 @@
 			});
 		}
 		window.sleep(playerLaserIterations * playerLaserInterval).then(() => {
-			if (laser) {
+			if (laser.parentElement) {
 				hitsInARow = 0;
 				laser.remove();
 			}
