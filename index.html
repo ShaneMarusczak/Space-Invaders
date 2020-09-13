@@ -11,17 +11,6 @@
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 </head>
 
-<div id="winLoss" class="shadowBox tile">
-	<h2>High Score: <span id="highScore"></span></h2>
-	<h2>Wins: <span id="playerWins"></span></h2>
-	<h2>Losses: <span id="playerLosses"></span></h2>
-	<div id="statsContainer">
-		<h2>Shots Fired: <span id="shotsFired"></span></h2>
-		<h2>Accuracy: <span id="accuracy"></span></h2>
-	</div>
-
-	<h2 id="upgradeText"></h2>
-</div>
 <canvas id='myCanvas' width='1000' height='750'></canvas>
 
 <body>
@@ -34,6 +23,16 @@
 				id="githubicon" src="images/github-icon.jpg"></a>
 	</header>
 	<main>
+		<div id="winLoss" class="shadowBox tile">
+			<h2>High Score: <span id="highScore"></span></h2>
+			<h2>Wins: <span id="playerWins"></span></h2>
+			<h2>Losses: <span id="playerLosses"></span></h2>
+			<div id="statsContainer">
+				<h2>Shots Fired: <span id="shotsFired"></span></h2>
+				<h2>Accuracy: <span id="accuracy"></span></h2>
+			</div>
+			<h2 id="upgradeText"></h2>
+		</div>
 		<div id="gameBoard" class="shadowBox">
 			<div id="enemies"></div>
 			<div id="ship">

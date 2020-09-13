@@ -86,7 +86,7 @@
 		es.remove();
 		destroyedEnemies++;
 		hitsInARow++;
-		currentPoints = currentPoints + Math.floor(hitsInARow / 10) + 1 * Number(es.attributes.points.value);
+		currentPoints = currentPoints + (Math.floor(hitsInARow / 10) + 1) * Number(es.attributes.points.value);
 		document.getElementById("pointsDisplay").classList.add("pointsFlash");
 		window.sleep(750).then(() => document.getElementById("pointsDisplay").classList.remove("pointsFlash"));
 		document.getElementById("points").innerText = currentPoints;
@@ -155,6 +155,7 @@
 	function lossHandler() {
 		window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
 		document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
+		currentPoints = 0;
 		window.setCookie("currentPointsSpace", 0, 10);
 		document.getElementById("points").innerText = 0;
 		playerLost = true;
@@ -167,7 +168,7 @@
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		if (shotsFired > 0) {
-			document.getElementById("statsContainer").style.display = "block";
+			document.getElementById("statsContainer").style.display = "flex";
 			document.getElementById("shotsFired").innerText = shotsFired;
 			document.getElementById("accuracy").innerText = Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 		}
@@ -236,7 +237,6 @@
 	}
 
 	(() => {
-
 		for (let i = 0; i < 32; i++) {
 			const shipRow = document.createElement("div");
 			document.getElementById("enemies").appendChild(shipRow);
