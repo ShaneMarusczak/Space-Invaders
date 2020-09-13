@@ -1,6 +1,7 @@
 "use strict";
 (() => {
 	let canFire = true;
+	let canRetreat = false;
 	let gameStarted = false;
 	let gameOver = false;
 	let numberOfEnemies = 0;
@@ -13,6 +14,8 @@
 	let cantFireInterval = 550;
 	let upgradedLaser = false;
 	let hitsInARow = 0;
+	let currentPoints = Number(window.getCookie("currentPointsSpace"));
+	const highScore = Number(window.getCookie("highScoreSpace"));
 	const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
 	const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
 	const clockSpeed = 375;
@@ -64,17 +67,7 @@
 				laser.style.top = convertToPXs(ship.offsetTop - tickMovement * 2 - (tickMovement * i));
 				enemyShips().forEach(es => {
 					if (colides(es, laser)) {
-						laser.remove();
-						es.remove();
-						destroyedEnemies++;
-						hitsInARow++;
-						if (destroyedEnemies === numberOfEnemies) {
-							gameOverHandler("You Win!");
-							window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
-							document.getElementById("playerWins").innerText = "Wins: " + (playerWinsOnLoad + 1);
-							document.getElementById("myCanvas").style.display = "block";
-
-						}
+						enemeyShipHitHandler(es, laser);
 					}
 				});
 			});
@@ -85,6 +78,30 @@
 				laser.remove();
 			}
 		});
+	}
+
+	function enemeyShipHitHandler(es, laser) {
+		laser.remove();
+		es.remove();
+		destroyedEnemies++;
+		hitsInARow++;
+		currentPoints = currentPoints + Math.floor(hitsInARow / 10) + 1 * Number(es.attributes.points.value);
+		document.getElementById("pointsDisplay").classList.add("pointsFlash");
+		window.sleep(750).then(() => document.getElementById("pointsDisplay").classList.remove("pointsFlash"));
+		document.getElementById("points").innerText = currentPoints;
+		canRetreat = true;
+		if (canRetreat && hitsInARow % 10 === 0) {
+			upgradeTextControl("Enemies Retreat!");
+			moveEnemyShips("ver", -1);
+			canRetreat = false;
+		}
+		if (destroyedEnemies === numberOfEnemies) {
+			gameOverHandler("You Win!");
+			window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
+			document.getElementById("playerWins").innerText = playerWinsOnLoad + 1;
+			document.getElementById("myCanvas").style.display = "block";
+
+		}
 	}
 
 	function fireComputerLaser(shouldReFire) {
@@ -103,7 +120,7 @@
 			laser.remove();
 			gameOverHandler("You Lose!");
 			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
-			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
+			document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
 		} else if (laser.offsetTop >= ship.offsetTop) {
 			laser.remove();
 			if (shouldReFire && !gameOver) {
@@ -134,7 +151,7 @@
 		if (enemyShips().some(es => colides(es, ship) || es.attributes.currentCell.value.split("-")[0] === "30")) {
 			gameOverHandler("You Lose!");
 			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
-			document.getElementById("playerLosses").innerText = "Losses: " + (playerLossesOnLoad + 1);
+			document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
 		}
 	}
 
@@ -144,9 +161,16 @@
 		Array.from(document.getElementsByClassName("laser")).forEach(l => l.remove());
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		if (shotsFired > 0) {
-			document.getElementById("shotsFired").innerText = "Shots Fired: " + shotsFired;
-			document.getElementById("accuracy").innerText = "Accuracy: " + Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
+			document.getElementById("statsContainer").style.display = "block";
+			document.getElementById("shotsFired").innerText = shotsFired;
+			document.getElementById("accuracy").innerText = Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 		}
+		window.setCookie("currentPointsSpace", currentPoints, 10);
+		if (currentPoints > highScore) {
+			window.setCookie("highScoreSpace", currentPoints, 10);
+			document.getElementById("highScore").innerText = currentPoints;
+		}
+		document.getElementById("reload").innerText = "Play Again";
 	}
 
 	function upgradeTextControl(message) {
@@ -172,16 +196,11 @@
 			if (window.randomIntFromInterval(1, 15) === 15) {
 				fireComputerLaser(false);
 			}
-			if ((shotsFired === 10 || shotsFired === 20) && destroyedEnemies / shotsFired > 0.65 && !upgradedLaser) {
+			if (shotsFired % 10 === 0 && destroyedEnemies / shotsFired > 0.65 && !upgradedLaser) {
 				upgradeTextControl("Laser Upgraded!");
 				cantFireInterval = 500;
 				playerLaserInterval = 150;
 				upgradedLaser = true;
-			}
-			if (hitsInARow === 10) {
-				upgradeTextControl("Enemies Retreat!");
-				moveEnemyShips("ver", -1);
-				hitsInARow = 0;
 			}
 			lossChecker();
 			if (!gameOver) {
@@ -212,11 +231,9 @@
 
 	(() => {
 
-		const enemies = document.getElementById("enemies");
-
 		for (let i = 0; i < 32; i++) {
 			const shipRow = document.createElement("div");
-			enemies.appendChild(shipRow);
+			document.getElementById("enemies").appendChild(shipRow);
 			shipRow.classList.add("ship-row");
 			shipRow.id = "row-" + i;
 			for (let j = 0; j < 50; j++) {
@@ -238,6 +255,7 @@
 				enemyShip.classList.add("enemyShip");
 				document.getElementById("cell-" + (3 * i) + "-" + (6 * j)).appendChild(enemyShip);
 				enemyShip.setAttribute("currentCell", (3 * i) + "-" + (6 * j));
+				enemyShip.setAttribute("points", -10 * i + 60);
 				numberOfEnemies++;
 			}
 		}
@@ -245,8 +263,9 @@
 		document.addEventListener("keydown", shipControl);
 		document.getElementById("start").addEventListener("click", startGame);
 		document.getElementById("reload").addEventListener("click", () => location.reload());
-		document.getElementById("playerWins").innerText = "Wins: " + playerWinsOnLoad;
-		document.getElementById("playerLosses").innerText = "Losses: " + playerLossesOnLoad;
-
+		document.getElementById("playerWins").innerText = playerWinsOnLoad;
+		document.getElementById("playerLosses").innerText = playerLossesOnLoad;
+		document.getElementById("highScore").innerText = highScore;
+		document.getElementById("points").innerText = currentPoints;
 	})();
 })();

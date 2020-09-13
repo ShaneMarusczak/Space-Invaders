@@ -11,11 +11,15 @@
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 </head>
 
-<div id="winLoss">
-	<h2 id="playerWins"></h2>
-	<h2 id="playerLosses"></h2>
-	<h2 id="shotsFired"></h2>
-	<h2 id="accuracy"></h2>
+<div id="winLoss" class="shadowBox tile">
+	<h2>High Score: <span id="highScore"></span></h2>
+	<h2>Wins: <span id="playerWins"></span></h2>
+	<h2>Losses: <span id="playerLosses"></span></h2>
+	<div id="statsContainer">
+		<h2>Shots Fired: <span id="shotsFired"></span></h2>
+		<h2>Accuracy: <span id="accuracy"></span></h2>
+	</div>
+
 	<h2 id="upgradeText"></h2>
 </div>
 <canvas id='myCanvas' width='1000' height='750'></canvas>
@@ -23,6 +27,7 @@
 <body>
 	<header>
 		<h1>Space Invaders</h1>
+		<h2 class="shadowBox tile" id="pointsDisplay">Current Score: <span id="points"></span></h2>
 		<a id="homeLink" href="https://marusczak.com/Games-Home-Page" rel="noreferrer"><img id="homeIcon"
 				src="images/house-icon.png"></a>
 		<a id="gitHubLink" href="https://github.com/ShaneMarusczak/Space-Invaders" target="_blank" rel="noreferrer"><img
@@ -41,7 +46,7 @@
 			<div id="start" class="shadowBox">Start</div>
 			<div id="reload" class="shadowBox">Start Over</div>
 		</div>
-		<p id="updateText">Last Updated: September 9, 2020</p>
+		<p id="updateText">Last Updated: September 13, 2020</p>
 	</footer>
 </body>
 <script type="text/javascript" src="https://marusczak.com/BuildingBlocks/js/buildingBlocks.min.js"></script>

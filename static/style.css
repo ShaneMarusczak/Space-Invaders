@@ -23,6 +23,31 @@
 	}
 }
 
+@keyframes pointsFlash {
+	0% {
+		background-color: azure;
+	}
+
+	100% {
+		background-color: dimgray;
+	}
+}
+
+.pointsFlash {
+	animation: pointsFlash 750ms;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#statsContainer {
+	display: none;
+}
+
 #upgradeText {
 	color: red;
 }
@@ -53,6 +78,21 @@ h1 {
 	position: absolute;
 	top: 200px;
 	left: 5vw;
+}
+
+span {
+	color: darkblue;
+}
+
+#pointsDisplay {
+	width: fit-content;
+}
+
+.tile {
+	padding: 5px;
+	border: 2px solid black;
+	border-radius: 7px;
+	background-color: dimgray;
 }
 
 #githubicon {
