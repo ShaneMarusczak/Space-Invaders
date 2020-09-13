@@ -15,6 +15,7 @@
 	let upgradedLaser = false;
 	let hitsInARow = 0;
 	let currentPoints = Number(window.getCookie("currentPointsSpace"));
+	let playerLost = false;
 	const highScore = Number(window.getCookie("highScoreSpace"));
 	const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
 	const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
@@ -118,9 +119,7 @@
 		if (colides(ship, laser)) {
 			ship.remove();
 			laser.remove();
-			gameOverHandler("You Lose!");
-			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
-			document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
+			lossHandler();
 		} else if (laser.offsetTop >= ship.offsetTop) {
 			laser.remove();
 			if (shouldReFire && !gameOver) {
@@ -149,10 +148,17 @@
 
 	function lossChecker() {
 		if (enemyShips().some(es => colides(es, ship) || es.attributes.currentCell.value.split("-")[0] === "30")) {
-			gameOverHandler("You Lose!");
-			window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
-			document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
+			lossHandler();
 		}
+	}
+
+	function lossHandler() {
+		window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+		document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
+		window.setCookie("currentPointsSpace", 0, 10);
+		document.getElementById("points").innerText = 0;
+		playerLost = true;
+		gameOverHandler("You Lose!");
 	}
 
 	function gameOverHandler(message) {
@@ -166,7 +172,7 @@
 			document.getElementById("accuracy").innerText = Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 		}
 		window.setCookie("currentPointsSpace", currentPoints, 10);
-		if (currentPoints > highScore) {
+		if (currentPoints > highScore && !playerLost) {
 			window.setCookie("highScoreSpace", currentPoints, 10);
 			document.getElementById("highScore").innerText = currentPoints;
 		}
