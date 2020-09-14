@@ -137,6 +137,7 @@
 
 	function startGame() {
 		if (!gameStarted) {
+			document.getElementById("start").classList.remove("startButtonFlash");
 			window.modal("Start!", 1500);
 			window.sleep(1500).then(() => {
 				gameStarted = true;

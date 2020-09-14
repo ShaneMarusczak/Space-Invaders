@@ -33,6 +33,26 @@
 	}
 }
 
+@keyframes startButtonFlash {
+	0% {
+		background-color: transparent;
+	}
+
+	50% {
+		background-color: azure;
+	}
+
+	100% {
+		background-color: transparent;
+	}
+}
+
+.startButtonFlash {
+	animation-name: startButtonFlash;
+	animation-duration: 2.5s;
+	animation-iteration-count: infinite;
+}
+
 .pointsFlash {
 	animation: pointsFlash 750ms;
 }
