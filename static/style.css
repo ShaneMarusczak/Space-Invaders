@@ -80,7 +80,6 @@ header {
 html {
 	background-color: gray;
 	font-family: "Orbitron", sans-serif;
-
 }
 
 #myCanvas {
@@ -92,7 +91,7 @@ h1 {
 	font-size: 3rem;
 	color: darkblue;
 	margin: 0;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 }
 
 #winLoss {
@@ -109,6 +108,7 @@ span {
 #pointsDisplay {
 	width: fit-content;
 	margin-top: 0;
+	margin-bottom: 10px;
 }
 
 .tile {
@@ -256,7 +256,7 @@ body {
 }
 
 #btns {
-	margin-top: 20px;
+	margin-top: 10px;
 	width: 350px;
 	display: flex;
 	flex-direction: row;
@@ -280,4 +280,8 @@ body {
 
 footer {
 	color: darkblue;
+}
+
+#updateText {
+	margin-top: 10px;
 }
