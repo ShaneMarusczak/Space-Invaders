@@ -274,5 +274,8 @@
 		document.getElementById("playerLosses").innerText = playerLossesOnLoad;
 		document.getElementById("highScore").innerText = highScore;
 		document.getElementById("points").innerText = currentPoints;
+
+		window.onkeydown = (e) => !(e.keyCode == 32 && e.target == document.body);
+
 	})();
 })();
