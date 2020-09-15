@@ -89,7 +89,7 @@
 		currentPoints = currentPoints + (Math.floor(hitsInARow / 10) + 1) * Number(es.attributes.points.value);
 		document.getElementById("pointsDisplay").classList.add("pointsFlash");
 		window.sleep(750).then(() => document.getElementById("pointsDisplay").classList.remove("pointsFlash"));
-		document.getElementById("points").innerText = currentPoints;
+		document.getElementById("points").textContent = currentPoints;
 		canRetreat = true;
 		if (canRetreat && hitsInARow % 10 === 0) {
 			upgradeTextControl("Enemies Retreat!");
@@ -99,7 +99,7 @@
 		if (destroyedEnemies === numberOfEnemies) {
 			gameOverHandler("You Win!");
 			window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
-			document.getElementById("playerWins").innerText = playerWinsOnLoad + 1;
+			document.getElementById("playerWins").textContent = playerWinsOnLoad + 1;
 			document.getElementById("myCanvas").style.display = "block";
 
 		}
@@ -155,10 +155,10 @@
 
 	function lossHandler() {
 		window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
-		document.getElementById("playerLosses").innerText = playerLossesOnLoad + 1;
+		document.getElementById("playerLosses").textContent = playerLossesOnLoad + 1;
 		currentPoints = 0;
 		window.setCookie("currentPointsSpace", 0, 10);
-		document.getElementById("points").innerText = 0;
+		document.getElementById("points").textContent = 0;
 		playerLost = true;
 		gameOverHandler("You Lose!");
 	}
@@ -170,24 +170,24 @@
 		Array.from(document.getElementsByClassName("enemyLaser")).forEach(l => l.remove());
 		if (shotsFired > 0) {
 			document.getElementById("statsContainer").style.display = "flex";
-			document.getElementById("shotsFired").innerText = shotsFired;
-			document.getElementById("accuracy").innerText = Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
+			document.getElementById("shotsFired").textContent = shotsFired;
+			document.getElementById("accuracy").textContent = Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
 		}
 		window.setCookie("currentPointsSpace", currentPoints, 10);
 		if (currentPoints > highScore && !playerLost) {
 			window.setCookie("highScoreSpace", currentPoints, 10);
-			document.getElementById("highScore").innerText = currentPoints;
+			document.getElementById("highScore").textContent = currentPoints;
 		}
-		document.getElementById("reload").innerText = "Play Again";
+		document.getElementById("reload").textContent = "Play Again";
 	}
 
 	function upgradeTextControl(message) {
 		const upgradeText = document.getElementById("upgradeText");
-		upgradeText.innerText = message;
+		upgradeText.textContent = message;
 		upgradeText.classList.add("flash");
 		window.sleep(4950).then(() => {
 			upgradeText.classList.remove("flash");
-			upgradeText.innerText = "";
+			upgradeText.textContent = "";
 		});
 	}
 
@@ -270,10 +270,10 @@
 		document.addEventListener("keydown", shipControl);
 		document.getElementById("start").addEventListener("click", startGame);
 		document.getElementById("reload").addEventListener("click", () => location.reload());
-		document.getElementById("playerWins").innerText = playerWinsOnLoad;
-		document.getElementById("playerLosses").innerText = playerLossesOnLoad;
-		document.getElementById("highScore").innerText = highScore;
-		document.getElementById("points").innerText = currentPoints;
+		document.getElementById("playerWins").textContent = playerWinsOnLoad;
+		document.getElementById("playerLosses").textContent = playerLossesOnLoad;
+		document.getElementById("highScore").textContent = highScore;
+		document.getElementById("points").textContent = currentPoints;
 
 		window.onkeydown = (e) => !(e.keyCode == 32 && e.target == document.body);
 
