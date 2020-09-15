@@ -33,13 +33,13 @@
 	function shipControl(e) {
 		if (gameStarted && !gameOver) {
 			const posLeft = ship.offsetLeft - gameBoard.offsetLeft - 1;
-			if (e.keyCode == "37" && posLeft - tickMovement >= 0) {
+			if (e.key === "ArrowLeft" && posLeft - tickMovement >= 0) {
 				e.preventDefault();
 				ship.style.marginLeft = convertToPXs(posLeft - tickMovement);
-			} else if (e.keyCode == "39" && posLeft + tickMovement <= (gameBoard.offsetWidth) - 100) {
+			} else if (e.key === "ArrowRight" && posLeft + tickMovement <= (gameBoard.offsetWidth) - 100) {
 				e.preventDefault();
 				ship.style.marginLeft = convertToPXs(posLeft + tickMovement);
-			} else if (e.keyCode == "32" && canFire) {
+			} else if (e.key === " " && canFire) {
 				e.preventDefault();
 				shotsFired++;
 				canFire = false;
@@ -275,7 +275,7 @@
 		document.getElementById("highScore").textContent = highScore;
 		document.getElementById("points").textContent = currentPoints;
 
-		window.onkeydown = (e) => !(e.keyCode == 32 && e.target == document.body);
+		window.onkeydown = (e) => !(e.key === " " && e.target == document.body);
 
 	})();
 })();
