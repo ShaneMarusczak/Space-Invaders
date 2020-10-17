@@ -1,57 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/style.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://marusczak.com/BuildingBlocks/css/modal.min.css"
+    />
+    <title>Space Invaders</title>
+    <meta name="Description" content="Play Space Invaders" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  </head>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="css/style.min.css" />
-	<link rel="stylesheet" type="text/css" href="https://marusczak.com/BuildingBlocks/css/modal.min.css" />
-	<title>Space Invaders</title>
-	<meta name="Description" content="Play Space Invaders">
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-</head>
+  <canvas id="myCanvas" width="1000" height="750"></canvas>
 
-<canvas id='myCanvas' width='1000' height='750'></canvas>
+  <body>
+    <header>
+      <h1>Space Invaders</h1>
+      <h2 class="shadowBox tile" id="pointsDisplay">
+        Current Score: <span id="points"></span>
+      </h2>
+      <a
+        id="homeLink"
+        href="https://marusczak.com/Games-Home-Page"
+        rel="noreferrer"
+        ><img id="homeIcon" src="images/house-icon.png"
+      /></a>
 
-<body>
-	<header>
-		<h1>Space Invaders</h1>
-		<h2 class="shadowBox tile" id="pointsDisplay">Current Score: <span id="points"></span></h2>
-		<a id="homeLink" href="https://marusczak.com/Games-Home-Page" rel="noreferrer"><img id="homeIcon"
-				src="images/house-icon.png"></a>
-		<a id="gitHubLink" href="https://github.com/ShaneMarusczak/Space-Invaders" target="_blank" rel="noreferrer"><img
-				id="githubicon" src="images/github-icon.png"></a>
-	</header>
-	<main>
-		<div id="winLoss" class="shadowBox tile">
-			<h2>High Score: <span id="highScore"></span></h2>
-			<h2>Wins: <span id="playerWins"></span></h2>
-			<h2>Losses: <span id="playerLosses"></span></h2>
-			<div id="statsContainer">
-				<h2>Shots Fired: <span id="shotsFired"></span></h2>
-				<h2>Accuracy: <span id="accuracy"></span></h2>
-			</div>
-			<h2 id="upgradeText"></h2>
-		</div>
-		<div id="gameBoard" class="shadowBox">
-			<div id="enemies"></div>
-			<div id="ship">
-				<img id="playerShipImg" src="images/player-ship.png" />
-			</div>
-		</div>
-	</main>
-	<footer>
-		<div id="btns">
-			<div id="start" class="shadowBox startButtonFlash">Start</div>
-			<div id="reload" class="shadowBox">Start Over</div>
-		</div>
-		<p id="updateText">Last Updated: October 7, 2020</p>
-	</footer>
-</body>
-<script type="text/javascript" src="https://marusczak.com/BuildingBlocks/js/buildingBlocks.min.js"></script>
-<script type="text/javascript" src="https://marusczak.com/BuildingBlocks/js/modal.min.js"></script>
-<script type="text/javascript" src="js/fireworks.min.js"></script>
-<script type="text/javascript" src="js/space_invaders.min.js"></script>
-
-
+      <a
+        id="gitHubLink"
+        href="https://github.com/ShaneMarusczak/Space-Invaders"
+        target="_blank"
+        rel="noreferrer"
+        ><img id="githubicon" src="images/github-icon.png"
+      /></a>
+    </header>
+    <main>
+      <div id="winLoss" class="shadowBox tile">
+        <h2>High Score: <span id="highScore"></span></h2>
+        <h2>Wins: <span id="playerWins"></span></h2>
+        <h2>Losses: <span id="playerLosses"></span></h2>
+        <div id="statsContainer">
+          <h2>Shots Fired: <span id="shotsFired"></span></h2>
+          <h2>Accuracy: <span id="accuracy"></span></h2>
+        </div>
+        <h2 id="upgradeText"></h2>
+      </div>
+      <div id="gameBoard" class="shadowBox">
+        <div id="enemies"></div>
+        <div id="ship">
+          <img id="playerShipImg" src="images/player-ship.png" />
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div id="btns">
+        <div id="start" class="shadowBox startButtonFlash">Start</div>
+        <div id="reload" class="shadowBox" onclick="location.reload()">
+          Start Over
+        </div>
+      </div>
+      <p id="updateText">Last Updated: October 7, 2020</p>
+    </footer>
+  </body>
+  <script
+    type="text/javascript"
+    src="https://marusczak.com/BuildingBlocks/js/buildingBlocks.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://marusczak.com/BuildingBlocks/js/modal.min.js"
+  ></script>
+  <script type="text/javascript" src="js/fireworks.min.js"></script>
+  <script type="text/javascript" src="js/space_invaders.min.js"></script>
 </html>

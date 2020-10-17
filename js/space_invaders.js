@@ -317,9 +317,6 @@
 
     document.addEventListener("keydown", shipControl);
     document.getElementById("start").addEventListener("click", startGame);
-    document
-      .getElementById("reload")
-      .addEventListener("click", () => location.reload());
     document.getElementById("playerWins").textContent = playerWinsOnLoad;
     document.getElementById("playerLosses").textContent = playerLossesOnLoad;
     document.getElementById("highScore").textContent = highScore;
