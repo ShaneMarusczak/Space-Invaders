@@ -1,4 +1,4 @@
-#Space Invaders
+# Space Invaders
 
 Enemy ships are controlled using a game loop. The game loop is implemented using a recursive function that waits a set period of time to call itself again.
 
