@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="css/style.min.css" />
     <link
-      rel="stylesheet"
-      type="text/css"
+      rel="preload"
       href="https://marusczak.com/BuildingBlocks/css/modal.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+
     <title>Space Invaders</title>
     <meta name="Description" content="Play Space Invaders" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
@@ -19,9 +21,7 @@
   <body>
     <header>
       <h1>Space Invaders</h1>
-      <h2 class="shadowBox tile" id="pointsDisplay">
-        Current Score: <span id="points"></span>
-      </h2>
+
       <a
         id="homeLink"
         href="https://marusczak.com/Games-Home-Page"
@@ -39,13 +39,10 @@
     </header>
     <main>
       <div id="winLoss" class="shadowBox tile">
+        <h2 id="pointsDisplay">Current Score: <span id="points"></span></h2>
         <h2>High Score: <span id="highScore"></span></h2>
         <h2>Wins: <span id="playerWins"></span></h2>
         <h2>Losses: <span id="playerLosses"></span></h2>
-        <div id="statsContainer">
-          <h2>Shots Fired: <span id="shotsFired"></span></h2>
-          <h2>Accuracy: <span id="accuracy"></span></h2>
-        </div>
         <h2 id="upgradeText"></h2>
       </div>
       <div id="gameBoard" class="shadowBox">
@@ -69,10 +66,11 @@
     type="text/javascript"
     src="https://marusczak.com/BuildingBlocks/js/buildingBlocks.min.js"
   ></script>
+  <script type="text/javascript" src="js/fireworks.min.js"></script>
+  <script type="text/javascript" src="js/space_invaders.min.js"></script>
   <script
     type="text/javascript"
     src="https://marusczak.com/BuildingBlocks/js/modal.min.js"
+    defer
   ></script>
-  <script type="text/javascript" src="js/fireworks.min.js"></script>
-  <script type="text/javascript" src="js/space_invaders.min.js"></script>
 </html>

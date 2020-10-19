@@ -63,11 +63,6 @@ header {
   align-items: center;
 }
 
-#statsContainer {
-  display: none;
-  flex-direction: column;
-}
-
 #upgradeText {
   color: red;
 }
@@ -90,24 +85,26 @@ h1 {
   font-size: 3rem;
   color: darkblue;
   margin: 0;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 #winLoss {
-  position: absolute;
-  top: 200px;
-  left: 4vw;
-  width: 250px;
+  display: flex;
+  position: relative;
+  top: auto;
+  left: auto;
+  font-size: medium;
+  margin-bottom: 10px;
+  width: auto;
+}
+
+#winLoss h2 {
+  padding-left: 15px;
+  margin: 0;
 }
 
 span {
   color: darkblue;
-}
-
-#pointsDisplay {
-  width: fit-content;
-  margin-top: 0;
-  margin-bottom: 10px;
 }
 
 .tile {
@@ -133,25 +130,6 @@ span {
   #githubicon,
   #homeIcon {
     top: 15px !important;
-  }
-
-  #winLoss {
-    display: flex;
-    position: relative;
-    top: auto;
-    left: auto;
-    font-size: medium;
-    margin-bottom: 10px;
-    width: auto;
-  }
-
-  #winLoss h2 {
-    padding-left: 15px;
-    margin: 0;
-  }
-
-  #statsContainer {
-    flex-direction: row;
   }
 }
 

@@ -102,11 +102,11 @@
     currentPoints =
       currentPoints +
       (Math.floor(hitsInARow / 10) + 1) * Number(es.attributes.points.value);
-    document.getElementById("pointsDisplay").classList.add("pointsFlash");
+    document.getElementById("winLoss").classList.add("pointsFlash");
     window
       .sleep(750)
       .then(() =>
-        document.getElementById("pointsDisplay").classList.remove("pointsFlash")
+        document.getElementById("winLoss").classList.remove("pointsFlash")
       );
     document.getElementById("points").textContent = currentPoints;
     canRetreat = true;
@@ -203,12 +203,6 @@
     Array.from(document.getElementsByClassName("enemyLaser")).forEach((l) =>
       l.remove()
     );
-    if (shotsFired > 0) {
-      document.getElementById("statsContainer").style.display = "flex";
-      document.getElementById("shotsFired").textContent = shotsFired;
-      document.getElementById("accuracy").textContent =
-        Math.floor((destroyedEnemies / shotsFired) * 100) + "%";
-    }
     window.setCookie("currentPointsSpace", currentPoints, 10);
     if (currentPoints > highScore && !playerLost) {
       window.setCookie("highScoreSpace", currentPoints, 10);
