@@ -260,3 +260,7 @@ footer {
 #updateText {
   margin-top: 10px;
 }
+
+.blocker {
+  background-color: #00fe00;
+}

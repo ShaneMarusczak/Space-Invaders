@@ -79,6 +79,13 @@
         laser.style.top = convertToPXs(
           ship.offsetTop - tickMovement * 2 - tickMovement * i
         );
+        document.querySelectorAll(".blocker").forEach((blocker) => {
+          if (colides(blocker, laser)) {
+            laser.remove();
+            blocker.classList.remove("blocker");
+          }
+        });
+
         enemyShips().forEach((es) => {
           if (colides(es, laser)) {
             enemeyShipHitHandler(es, laser);
@@ -111,7 +118,7 @@
     document.getElementById("points").textContent = currentPoints;
     canRetreat = true;
     if (canRetreat && hitsInARow % 10 === 0) {
-      upgradeTextControl("Enemies Retreat!");
+      upgradeTextControl("Enemies Retreat");
       moveEnemyShips("ver", -1);
       canRetreat = false;
     }
@@ -126,16 +133,32 @@
   function fireComputerLaser(shouldReFire) {
     if (!gameOver) {
       const laser = document.createElement("div");
+      const ess = enemyShips();
       laser.classList.add("enemyLaser");
-      const cell = enemyShips()[
-        window.randomIntFromInterval(0, enemyShips().length - 1)
-      ].attributes.currentCell.value;
+      const cell =
+        ess[window.randomIntFromInterval(0, ess.length - 1)].attributes
+          .currentCell.value;
       document.getElementById("cell-" + cell).appendChild(laser);
       moveComputerLaser(laser, shouldReFire);
     }
   }
 
   function moveComputerLaser(laser, shouldReFire) {
+    let shouldReturn = false;
+    document.querySelectorAll(".blocker").forEach((blocker) => {
+      if (colides(blocker, laser)) {
+        laser.remove();
+        blocker.classList.remove("blocker");
+        if (shouldReFire) {
+          fireComputerLaser(true);
+        }
+        shouldReturn = true;
+      }
+    });
+    if (shouldReturn) {
+      return;
+    }
+
     if (colides(ship, laser)) {
       ship.remove();
       laser.remove();
@@ -231,15 +254,15 @@
         moveEnemyShips("hor", horizontalDirection);
         justMovedDown = false;
       }
-      if (window.randomIntFromInterval(1, 15) === 15) {
-        fireComputerLaser(false);
+      if (window.randomIntFromInterval(1, 8) === 5) {
+        fireComputerLaser(window.randomIntFromInterval(1, 15) === 5);
       }
       if (
         shotsFired % 10 === 0 &&
         destroyedEnemies / shotsFired > 0.65 &&
         !upgradedLaser
       ) {
-        upgradeTextControl("Laser Upgraded!");
+        upgradeTextControl("Laser Upgrade");
         cantFireInterval = 500;
         playerLaserInterval = 150;
         upgradedLaser = true;
@@ -264,6 +287,7 @@
   };
 
   function moveEnemyShips(direction, distance) {
+    const blockers = document.querySelectorAll(".blocker");
     enemyShips().forEach((es) => {
       const row = Number(es.attributes.currentCell.value.split("-")[0]);
       const col = Number(es.attributes.currentCell.value.split("-")[1]);
@@ -274,6 +298,11 @@
           : row + distance + "-" + col;
       ship.attributes.currentCell.value = newCell;
       document.getElementById("cell-" + newCell).appendChild(ship);
+      blockers.forEach((blocker) => {
+        if (colides(blocker, es)) {
+          blocker.classList.remove("blocker");
+        }
+      });
     });
   }
 
@@ -288,6 +317,66 @@
         shipRow.appendChild(shipCell);
         shipCell.classList.add("ship-cell");
         shipCell.id = "cell-" + i + "-" + j;
+        if (
+          (i === 25 || i === 26) &&
+          (j === 2 ||
+            j === 3 ||
+            j === 4 ||
+            j === 5 ||
+            j === 6 ||
+            j === 12 ||
+            j === 13 ||
+            j === 14 ||
+            j === 15 ||
+            j === 16 ||
+            j === 22 ||
+            j === 23 ||
+            j === 24 ||
+            j === 25 ||
+            j === 26 ||
+            j === 32 ||
+            j === 33 ||
+            j === 34 ||
+            j === 35 ||
+            j === 36 ||
+            j === 42 ||
+            j === 43 ||
+            j === 44 ||
+            j === 45 ||
+            j === 46)
+        ) {
+          if (
+            i == 25 &&
+            (j === 2 ||
+              j === 6 ||
+              j === 12 ||
+              j === 16 ||
+              j === 22 ||
+              j === 26 ||
+              j === 32 ||
+              j === 36 ||
+              j === 42 ||
+              j === 46)
+          ) {
+            continue;
+          }
+          shipCell.classList.add("blocker");
+        }
+        if (
+          i === 27 &&
+          (j === 2 ||
+            j === 6 ||
+            j === 12 ||
+            j === 16 ||
+            j === 22 ||
+            j === 26 ||
+            j === 32 ||
+            j === 36 ||
+            j === 42 ||
+            j === 46)
+        ) {
+          shipCell.classList.add("blocker");
+        }
       }
     }
 
