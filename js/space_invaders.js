@@ -1,7 +1,6 @@
 "use strict";
 (() => {
   let canFire = true;
-  let canRetreat = false;
   let gameStarted = false;
   let gameOver = false;
   let numberOfEnemies = 0;
@@ -39,16 +38,22 @@
   function shipControl(e) {
     if (gameStarted && !gameOver) {
       const posLeft = ship.offsetLeft - gameBoard.offsetLeft - 1;
-      if (e.key === "ArrowLeft" && posLeft - tickMovement >= 0) {
+      if (
+        (e.key === "ArrowLeft" || e.key === "a") &&
+        posLeft - tickMovement >= 0
+      ) {
         e.preventDefault();
         ship.style.marginLeft = convertToPXs(posLeft - tickMovement);
       } else if (
-        e.key === "ArrowRight" &&
+        (e.key === "ArrowRight" || e.key === "d") &&
         posLeft + tickMovement <= gameBoard.offsetWidth - 100
       ) {
         e.preventDefault();
         ship.style.marginLeft = convertToPXs(posLeft + tickMovement);
-      } else if (e.key === " " && canFire) {
+      } else if (
+        (e.key === " " || e.key === "ArrowUp" || e.key === "w") &&
+        canFire
+      ) {
         e.preventDefault();
         shotsFired++;
         canFire = false;
@@ -116,11 +121,9 @@
         document.getElementById("winLoss").classList.remove("pointsFlash")
       );
     document.getElementById("points").textContent = currentPoints;
-    canRetreat = true;
-    if (canRetreat && hitsInARow % 10 === 0) {
-      upgradeTextControl("Enemies Retreat");
+    if (hitsInARow % 10 === 0) {
+      upgradeTextControl("The Enemy Retreats!");
       moveEnemyShips("ver", -1);
-      canRetreat = false;
     }
     if (destroyedEnemies === numberOfEnemies) {
       gameOverHandler("You Win!");
@@ -185,6 +188,7 @@
   function startGame() {
     if (!gameStarted) {
       document.getElementById("start").classList.remove("startButtonFlash");
+      document.getElementById("winLoss").scrollIntoView();
       window.modal("Start!", 1500);
       window.sleep(1500).then(() => {
         gameStarted = true;
@@ -237,9 +241,7 @@
   function upgradeTextControl(message) {
     const upgradeText = document.getElementById("upgradeText");
     upgradeText.textContent = message;
-    upgradeText.classList.add("flash");
-    window.sleep(4950).then(() => {
-      upgradeText.classList.remove("flash");
+    window.sleep(4000).then(() => {
       upgradeText.textContent = "";
     });
   }
@@ -254,7 +256,7 @@
         moveEnemyShips("hor", horizontalDirection);
         justMovedDown = false;
       }
-      if (window.randomIntFromInterval(1, 8) === 5) {
+      if (window.randomIntFromInterval(1, 10) === 5) {
         fireComputerLaser(window.randomIntFromInterval(1, 15) === 5);
       }
       if (
@@ -262,7 +264,7 @@
         destroyedEnemies / shotsFired > 0.65 &&
         !upgradedLaser
       ) {
-        upgradeTextControl("Laser Upgrade");
+        upgradeTextControl("Laser Upgraded!");
         cantFireInterval = 500;
         playerLaserInterval = 150;
         upgradedLaser = true;
@@ -405,6 +407,7 @@
     document.getElementById("highScore").textContent = highScore;
     document.getElementById("points").textContent = currentPoints;
 
-    window.onkeydown = (e) => !(e.key === " " && e.target == document.body);
+    window.onkeydown = (e) =>
+      !((e.key === " " || e.key === "ArrowUp") && e.target == document.body);
   })();
 })();

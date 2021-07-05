@@ -65,10 +65,15 @@ header {
 
 #upgradeText {
   color: red;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  height: 2rem;
 }
 
 .flash {
-  animation: flash 5s;
+  animation: flash s;
 }
 
 html {
@@ -95,7 +100,7 @@ h1 {
   left: auto;
   font-size: medium;
   margin-bottom: 10px;
-  width: auto;
+  width: 1000px;
 }
 
 #winLoss h2 {
@@ -153,7 +158,9 @@ span {
   transform: translateY(-5px);
 }
 
-body {
+body,
+footer,
+main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -231,17 +238,17 @@ body {
 }
 
 #btns {
+  margin-left: 10px;
   margin-top: 10px;
-  width: 350px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 #btns > div {
   color: darkblue;
   font-size: 1.7em;
   border-radius: 7px;
-  width: fit-content;
   padding: 5px;
   border: 1px solid black;
   margin-right: 30px;
