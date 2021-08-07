@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Orbitron&display=swap");
-
 @keyframes flash {
   0% {
     opacity: 0;
@@ -77,8 +75,8 @@ header {
 }
 
 html {
-  background-color: gray;
-  font-family: "Orbitron", sans-serif;
+  background-color: #b0c4de;
+  font-family: "Roboto Mono", monospace;
 }
 
 #myCanvas {
@@ -88,7 +86,6 @@ html {
 
 h1 {
   font-size: 3rem;
-  color: darkblue;
   margin: 0;
   margin-bottom: 15px;
 }
@@ -108,15 +105,10 @@ h1 {
   margin: 0;
 }
 
-span {
-  color: darkblue;
-}
-
 .tile {
   padding: 5px;
   border: 2px solid black;
   border-radius: 7px;
-  background-color: dimgray;
 }
 
 #githubicon {
@@ -140,7 +132,7 @@ span {
 
 #githubicon:hover {
   transform: translateY(-5px);
-  background-color: dimgray;
+  background-color: linen;
 }
 
 #homeIcon {
@@ -202,10 +194,6 @@ main {
   background-color: black;
 }
 
-.shadowBox {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 .laser {
   position: absolute;
   width: 7px;
@@ -246,7 +234,6 @@ main {
 }
 
 #btns > div {
-  color: darkblue;
   font-size: 1.7em;
   border-radius: 7px;
   padding: 5px;
@@ -258,10 +245,6 @@ main {
 #btns > div:hover {
   background-color: dimgray;
   cursor: pointer;
-}
-
-footer {
-  color: darkblue;
 }
 
 #updateText {
