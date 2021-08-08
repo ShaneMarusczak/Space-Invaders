@@ -13,12 +13,12 @@
   let cantFireInterval = 550;
   let upgradedLaser = false;
   let hitsInARow = 0;
+  let clockSpeed = 375;
   let currentPoints = Number(window.getCookie("currentPointsSpace"));
   let playerLost = false;
   const highScore = Number(window.getCookie("highScoreSpace"));
   const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
   const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
-  const clockSpeed = 375;
   const playerLaserIterations = 28;
   const tickMovement = 25;
   const imageStore = [
@@ -406,6 +406,8 @@
     document.getElementById("playerLosses").textContent = playerLossesOnLoad;
     document.getElementById("highScore").textContent = highScore;
     document.getElementById("points").textContent = currentPoints;
+
+    clockSpeed = clockSpeed - (currentPoints / 500) * 5;
 
     window.onkeydown = (e) =>
       !((e.key === " " || e.key === "ArrowUp") && e.target == document.body);
