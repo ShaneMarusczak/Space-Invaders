@@ -37,7 +37,7 @@ function resetFirework(firework) {
 function explode() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   fireworks.forEach((firework, index) => {
-    if (firework.phase == "explode") {
+    if (firework.phase === "explode") {
       firework.sparks.forEach((spark) => {
         for (let i = 0; i < 10; i++) {
           const trailAge = firework.age + i;

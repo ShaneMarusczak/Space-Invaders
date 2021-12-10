@@ -14,11 +14,11 @@
   let upgradedLaser = false;
   let hitsInARow = 0;
   let clockSpeed = 375;
-  let currentPoints = Number(window.getCookie("currentPointsSpace"));
+  let currentPoints = Number(getCookie("currentPointsSpace"));
   let playerLost = false;
-  const highScore = Number(window.getCookie("highScoreSpace"));
-  const playerWinsOnLoad = Number(window.getCookie("playerWinsSpace"));
-  const playerLossesOnLoad = Number(window.getCookie("playerLossesSpace"));
+  const highScore = Number(getCookie("highScoreSpace"));
+  const playerWinsOnLoad = Number(getCookie("playerWinsSpace"));
+  const playerLossesOnLoad = Number(getCookie("playerLossesSpace"));
   const playerLaserIterations = 28;
   const tickMovement = 25;
   const imageStore = [
@@ -57,7 +57,7 @@
         e.preventDefault();
         shotsFired++;
         canFire = false;
-        window.sleep(cantFireInterval).then(() => {
+        sleep(cantFireInterval).then(() => {
           canFire = true;
         });
         firePlayerLaser();
@@ -80,7 +80,7 @@
     laser.style.top = convertToPXs(ship.offsetTop - 30);
     ship.appendChild(laser);
     for (let i = 0; i < playerLaserIterations; i++) {
-      window.sleep(i * playerLaserInterval).then(() => {
+      sleep(i * playerLaserInterval).then(() => {
         laser.style.top = convertToPXs(
           ship.offsetTop - tickMovement * 2 - tickMovement * i
         );
@@ -98,7 +98,7 @@
         });
       });
     }
-    window.sleep(playerLaserIterations * playerLaserInterval).then(() => {
+    sleep(playerLaserIterations * playerLaserInterval).then(() => {
       if (laser.parentElement) {
         hitsInARow = 0;
         laser.remove();
@@ -115,8 +115,7 @@
       currentPoints +
       (Math.floor(hitsInARow / 10) + 1) * Number(es.attributes.points.value);
     document.getElementById("winLoss").classList.add("pointsFlash");
-    window
-      .sleep(750)
+    sleep(750)
       .then(() =>
         document.getElementById("winLoss").classList.remove("pointsFlash")
       );
@@ -127,7 +126,7 @@
     }
     if (destroyedEnemies === numberOfEnemies) {
       gameOverHandler("You Win!");
-      window.setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
+      setCookie("playerWinsSpace", playerWinsOnLoad + 1, 10);
       document.getElementById("playerWins").textContent = playerWinsOnLoad + 1;
       document.getElementById("myCanvas").style.display = "block";
     }
@@ -139,7 +138,7 @@
       const ess = enemyShips();
       laser.classList.add("enemyLaser");
       const cell =
-        ess[window.randomIntFromInterval(0, ess.length - 1)].attributes
+        ess[randomIntFromInterval(0, ess.length - 1)].attributes
           .currentCell.value;
       document.getElementById("cell-" + cell).appendChild(laser);
       moveComputerLaser(laser, shouldReFire);
@@ -169,12 +168,12 @@
     } else if (laser.offsetTop >= ship.offsetTop) {
       laser.remove();
       if (shouldReFire && !gameOver) {
-        window.sleep(window.randomIntFromInterval(350, 550)).then(() => {
+        sleep(randomIntFromInterval(350, 550)).then(() => {
           fireComputerLaser(shouldReFire);
         });
       }
     } else {
-      window.sleep(200).then(() => {
+      sleep(200).then(() => {
         laser.style.marginTop = convertToPXs(
           Number(
             laser.style.marginTop.substring(0, laser.style.marginTop.length - 2)
@@ -189,8 +188,8 @@
     if (!gameStarted) {
       document.getElementById("start").classList.remove("startButtonFlash");
       document.getElementById("winLoss").scrollIntoView();
-      window.modal("Start!", 1500);
-      window.sleep(1500).then(() => {
+      modal("Start!", 1500);
+      sleep(1500).then(() => {
         gameStarted = true;
         gameTick();
         fireComputerLaser(true);
@@ -211,11 +210,11 @@
   }
 
   function lossHandler() {
-    window.setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
+    setCookie("playerLossesSpace", playerLossesOnLoad + 1, 10);
     document.getElementById("playerLosses").textContent =
       playerLossesOnLoad + 1;
     currentPoints = 0;
-    window.setCookie("currentPointsSpace", 0, 10);
+    setCookie("currentPointsSpace", 0, 10);
     document.getElementById("points").textContent = 0;
     playerLost = true;
     gameOverHandler("You Lose!");
@@ -223,16 +222,16 @@
 
   function gameOverHandler(message) {
     gameOver = true;
-    window.modal(message, 2000);
+    modal(message, 2000);
     Array.from(document.getElementsByClassName("laser")).forEach((l) =>
       l.remove()
     );
     Array.from(document.getElementsByClassName("enemyLaser")).forEach((l) =>
       l.remove()
     );
-    window.setCookie("currentPointsSpace", currentPoints, 10);
+    setCookie("currentPointsSpace", currentPoints, 10);
     if (currentPoints > highScore && !playerLost) {
-      window.setCookie("highScoreSpace", currentPoints, 10);
+      setCookie("highScoreSpace", currentPoints, 10);
       document.getElementById("highScore").textContent = currentPoints;
     }
     document.getElementById("reload").textContent = "Play Again";
@@ -241,7 +240,7 @@
   function upgradeTextControl(message) {
     const upgradeText = document.getElementById("upgradeText");
     upgradeText.textContent = message;
-    window.sleep(4000).then(() => {
+    sleep(4000).then(() => {
       upgradeText.textContent = "";
     });
   }
@@ -256,8 +255,8 @@
         moveEnemyShips("hor", horizontalDirection);
         justMovedDown = false;
       }
-      if (window.randomIntFromInterval(1, 10) === 5) {
-        fireComputerLaser(window.randomIntFromInterval(1, 15) === 5);
+      if (randomIntFromInterval(1, 10) === 5) {
+        fireComputerLaser(randomIntFromInterval(1, 15) === 5);
       }
       if (
         shotsFired % 10 === 0 &&
@@ -271,7 +270,7 @@
       }
       lossChecker();
       if (!gameOver) {
-        window.sleep(clockSpeed - 16 * shipSpeed).then(() => gameTick());
+        sleep(clockSpeed - 16 * shipSpeed).then(() => gameTick());
       }
     }
   }
@@ -306,6 +305,52 @@
         }
       });
     });
+  }
+
+  function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    const expires = "expires=" + d.toUTCString();
+    document.cookie =
+        cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=Lax";
+  }
+
+  function getCookie(cname) {
+    const name = cname + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function modal(message, duration) {
+    const modalBox = document.createElement("div");
+    modalBox.id = "modal-box";
+    const innerModalBox = document.createElement("div");
+    innerModalBox.id = "inner-modal-box";
+    const modalMessage = document.createElement("span");
+    modalMessage.id = "modal-message";
+    innerModalBox.appendChild(modalMessage);
+    modalBox.appendChild(innerModalBox);
+    modalMessage.innerText = message;
+    document.getElementsByTagName("html")[0].appendChild(modalBox);
+    sleep(duration).then(() => modalBox.remove());
   }
 
   (() => {
@@ -348,7 +393,7 @@
             j === 46)
         ) {
           if (
-            i == 25 &&
+            i === 25 &&
             (j === 2 ||
               j === 6 ||
               j === 12 ||
@@ -410,6 +455,6 @@
     clockSpeed = clockSpeed - (currentPoints / 500) * 5;
 
     window.onkeydown = (e) =>
-      !((e.key === " " || e.key === "ArrowUp") && e.target == document.body);
+      !((e.key === " " || e.key === "ArrowUp") && e.target === document.body);
   })();
 })();
