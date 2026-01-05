@@ -1,71 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="Description" content="Play Space Invaders - A classic arcade game" />
+    <title>Space Invaders</title>
+
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@500&display=swap"
       rel="stylesheet"
     />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <title>Space Invaders</title>
-    <meta name="Description" content="Play Space Invaders" />
+
+    <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
     <link rel="manifest" href="site.webmanifest" />
   </head>
 
-  <canvas id="myCanvas" width="1000" height="750"></canvas>
-
   <body>
-    <header>
+    <!-- Skip link for accessibility -->
+    <a href="#gameBoard" class="sr-only" id="skipLink">Skip to game</a>
+
+    <!-- Victory animation canvas -->
+    <canvas
+      id="myCanvas"
+      width="1000"
+      height="750"
+      aria-hidden="true"
+      role="presentation"
+    ></canvas>
+
+    <header role="banner">
       <h1>Space Invaders</h1>
 
       <a
         id="homeLink"
         href="https://marusczak.com/Games-Home-Page"
         rel="noreferrer"
-        ><img id="homeIcon" src="images/house-icon.png" alt="home"
-      /></a>
+        aria-label="Go to Games Home Page"
+      >
+        <img id="homeIcon" src="images/house-icon.png" alt="" aria-hidden="true" />
+      </a>
 
       <a
         id="gitHubLink"
         href="https://github.com/ShaneMarusczak/Space-Invaders"
         target="_blank"
         rel="noreferrer"
-        ><img id="githubicon" src="images/github-icon.png" alt="github"
-      /></a>
+        aria-label="View source code on GitHub (opens in new tab)"
+      >
+        <img id="githubicon" src="images/github-icon.png" alt="" aria-hidden="true" />
+      </a>
     </header>
-    <main>
-      <div id="winLoss" class="shadowBox tile">
-        <h2 id="pointsDisplay">Current Score: <span id="points"></span></h2>
-        <h2>High Score: <span id="highScore"></span></h2>
-        <h2>Wins: <span id="playerWins"></span></h2>
-        <h2>Losses: <span id="playerLosses"></span></h2>
-      </div>
+
+    <main role="main">
+      <!-- Score Panel -->
+      <section
+        id="winLoss"
+        class="shadowBox tile"
+        aria-label="Game Statistics"
+        role="region"
+      >
+        <h2>Level: <span id="currentLevel" aria-live="polite">1</span></h2>
+        <h2 id="pointsDisplay">Current Score: <span id="points" aria-live="polite">0</span></h2>
+        <h2>High Score: <span id="highScore">0</span></h2>
+        <h2>Wins: <span id="playerWins">0</span></h2>
+        <h2>Losses: <span id="playerLosses">0</span></h2>
+      </section>
+
+      <!-- Game Area -->
       <div class="body">
-        <h2 id="upgradeText"></h2>
-        <div id="gameBoard" class="shadowBox">
-          <div id="enemies"></div>
-          <div id="ship">
-            <img id="playerShipImg" src="images/player-ship.png" alt="player ship"/>
+        <h2 id="upgradeText" aria-live="assertive" role="alert"></h2>
+        <div
+          id="gameBoard"
+          class="shadowBox"
+          role="application"
+          aria-label="Game board. Use arrow keys or WASD to move, Space to fire, Escape to pause."
+          tabindex="0"
+        >
+          <div id="pauseText" aria-hidden="true">PAUSED</div>
+          <div id="enemies" aria-hidden="true"></div>
+          <div id="ship" aria-label="Player ship">
+            <img
+              id="playerShipImg"
+              src="images/player-ship.png"
+              alt=""
+              aria-hidden="true"
+            />
           </div>
         </div>
       </div>
     </main>
-    <footer>
-      <div id="btns">
-        <div id="start" class="shadowBox startButtonFlash">Start</div>
-        <div id="reload" class="shadowBox" onclick="location.reload()">
+
+    <footer role="contentinfo">
+      <nav id="btns" aria-label="Game controls">
+        <div
+          id="start"
+          class="shadowBox startButtonFlash"
+          role="button"
+          tabindex="0"
+          aria-label="Start game"
+        >
+          Start
+        </div>
+        <div
+          id="reload"
+          class="shadowBox"
+          role="button"
+          tabindex="0"
+          aria-label="Restart game"
+        >
           Start Over
         </div>
-      </div>
-      <p id="updateText" title="8:05 AM">Last Updated: December 10, 2021</p>
+      </nav>
+      <p id="updateText">
+        <span class="sr-only">Game instructions: </span>
+        Use Arrow Keys or WASD to move. Space/W/Up to fire. Escape to pause.
+      </p>
     </footer>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="js/fireworks.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
-  <script type="text/javascript" src="js/fireworks.js"></script>
-  <script type="text/javascript" src="js/space_invaders.js"></script>
 </html>

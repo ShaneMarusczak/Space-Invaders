@@ -1,152 +1,113 @@
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+
+:root {
+  /* Colors */
+  --color-bg: #b0c4de;
+  --color-bg-game: black;
+  --color-accent: azure;
+  --color-text: black;
+  --color-laser-player: red;
+  --color-laser-enemy: green;
+  --color-blocker: #00fe00;
+  --color-upgrade-text: red;
+  --color-hover: dimgray;
+  --color-modal-overlay: rgba(0, 0, 0, 0.6);
+  --color-shadow: rgba(0, 0, 0, 0.2);
+  --color-shadow-dark: rgba(0, 0, 0, 0.19);
+
+  /* Dimensions */
+  --grid-cell-size: 25px;
+  --game-width: 1000px;
+  --game-height: 800px;
+  --enemies-height: 740px;
+  --ship-width: 95px;
+  --ship-height: 30px;
+  --enemy-width: 75px;
+  --enemy-height: 30px;
+  --laser-width: 7px;
+  --laser-height: 30px;
+  --enemy-laser-width: 8px;
+  --enemy-laser-height: 25px;
+  --icon-size: 60px;
+
+  /* Timing */
+  --transition-fast: 500ms;
+  --transition-slow: 1.5s;
+  --animation-flash: 2.5s;
+  --animation-points: 750ms;
+
+  /* Spacing */
+  --border-radius: 7px;
+  --border-radius-small: 5px;
+  --spacing-sm: 5px;
+  --spacing-md: 10px;
+  --spacing-lg: 15px;
+
+  /* Typography */
+  --font-primary: "Roboto Mono", monospace;
+  --font-size-title: 3rem;
+  --font-size-upgrade: 2rem;
+  --font-size-button: 1.7em;
+  --font-size-modal: xx-large;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
 @keyframes flash {
-  0% {
-    opacity: 0;
-  }
-
-  25% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  50% { opacity: 0; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 @keyframes pointsFlash {
-  0% {
-    background-color: azure;
-  }
-
-  100% {
-    background-color: transparent;
-  }
+  0% { background-color: var(--color-accent); }
+  100% { background-color: transparent; }
 }
 
 @keyframes startButtonFlash {
-  0% {
-    background-color: transparent;
-  }
+  0% { background-color: transparent; }
+  50% { background-color: var(--color-accent); }
+  100% { background-color: transparent; }
+}
 
-  50% {
-    background-color: azure;
-  }
-
-  100% {
-    background-color: transparent;
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 .startButtonFlash {
   animation-name: startButtonFlash;
-  animation-duration: 2.5s;
+  animation-duration: var(--animation-flash);
   animation-iteration-count: infinite;
 }
 
 .pointsFlash {
-  animation: pointsFlash 750ms;
-}
-
-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#upgradeText {
-  color: red;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  height: 2rem;
+  animation: pointsFlash var(--animation-points);
 }
 
 .flash {
   animation: flash 1s;
 }
 
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
 html {
-  background-color: #b0c4de;
-  font-family: "Roboto Mono", monospace;
-}
-
-#myCanvas {
-  display: none;
-  position: absolute;
-}
-
-h1 {
-  font-size: 3rem;
-  margin: 0 0 15px;
-}
-
-#winLoss {
-  display: flex;
-  position: relative;
-  top: auto;
-  left: auto;
-  font-size: medium;
-  margin-bottom: 10px;
-  width: 1000px;
-}
-
-#winLoss h2 {
-  padding-left: 15px;
-  margin: 0;
-}
-
-.tile {
-  padding: 5px;
-  border: 2px solid black;
-  border-radius: 7px;
-}
-
-#githubicon {
-  width: 60px;
-  height: 60px;
-  position: absolute;
-  right: 10vw;
-  top: 40px;
-  transition: 1.5s;
-  z-index: 0;
-  background-color: transparent;
-  border-radius: 30px;
-}
-
-@media screen and (max-width: 1700px) {
-  #githubicon,
-  #homeIcon {
-    top: 15px !important;
-  }
-}
-
-#githubicon:hover {
-  transform: translateY(-5px);
-  background-color: linen;
-}
-
-#homeIcon {
-  position: absolute;
-  top: 40px;
-  left: 10vw;
-  width: 60px;
-  height: 60px;
-  transition: 1.5s;
-  z-index: 0;
-  background-color: transparent;
-}
-
-#homeIcon:hover {
-  transform: translateY(-5px);
+  background-color: var(--color-bg);
+  font-family: var(--font-primary);
 }
 
 body,
@@ -158,18 +119,182 @@ main {
   align-items: center;
 }
 
+/* ============================================
+   HEADER
+   ============================================ */
+
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: var(--font-size-title);
+  margin: 0 0 var(--spacing-lg);
+}
+
+#githubicon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  position: absolute;
+  right: 10vw;
+  top: 40px;
+  transition: var(--transition-slow);
+  z-index: 0;
+  background-color: transparent;
+  border-radius: 30px;
+}
+
+#githubicon:hover {
+  transform: translateY(-5px);
+  background-color: linen;
+}
+
+#homeIcon {
+  position: absolute;
+  top: 40px;
+  left: 10vw;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  transition: var(--transition-slow);
+  z-index: 0;
+  background-color: transparent;
+}
+
+#homeIcon:hover {
+  transform: translateY(-5px);
+}
+
+/* Icon link focus styles for accessibility */
+#homeLink:focus,
+#gitHubLink:focus {
+  outline: 3px solid var(--color-laser-player);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 1700px) {
+  #githubicon,
+  #homeIcon {
+    top: 15px !important;
+  }
+}
+
+/* ============================================
+   SCORE DISPLAY
+   ============================================ */
+
+#winLoss {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  top: auto;
+  left: auto;
+  font-size: medium;
+  margin-bottom: var(--spacing-md);
+  width: var(--game-width);
+  max-width: 95vw;
+}
+
+#winLoss h2 {
+  padding-left: var(--spacing-lg);
+  margin: 0;
+}
+
+.tile {
+  padding: var(--spacing-sm);
+  border: 2px solid var(--color-text);
+  border-radius: var(--border-radius);
+}
+
+/* ============================================
+   GAME BOARD
+   ============================================ */
+
+#upgradeText {
+  color: var(--color-upgrade-text);
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-upgrade);
+  height: var(--font-size-upgrade);
+}
+
+/* Pause overlay */
+#pauseText {
+  color: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  z-index: 10;
+  text-shadow: 2px 2px 4px black;
+  display: none;
+}
+
+#gameBoard {
+  border: 1px solid var(--color-text);
+  width: var(--game-width);
+  height: var(--game-height);
+  background-color: var(--color-bg-game);
+  position: relative;
+  max-width: 95vw;
+}
+
+#gameBoard.paused {
+  opacity: 0.7;
+}
+
+#gameBoard.paused #pauseText {
+  display: block;
+}
+
+#enemies {
+  width: var(--game-width);
+  height: var(--enemies-height);
+  max-width: 95vw;
+}
+
+.ship-row {
+  display: flex;
+  height: var(--grid-cell-size);
+}
+
+.ship-cell {
+  height: var(--grid-cell-size);
+  width: var(--grid-cell-size);
+}
+
+.blocker {
+  background-color: var(--color-blocker);
+}
+
+/* ============================================
+   SHIPS
+   ============================================ */
+
+#ship {
+  margin: 0;
+  width: var(--ship-width);
+  height: var(--ship-height);
+  background-color: transparent;
+  border-radius: var(--border-radius-small);
+}
+
 #playerShipImg {
   margin-top: -10px;
   width: 100px;
   height: 50px;
 }
 
-#ship {
-  margin: 0;
-  width: 95px;
-  height: 30px;
+.enemyShip {
+  position: absolute;
+  width: var(--enemy-width);
+  height: var(--enemy-height);
   background-color: transparent;
-  border-radius: 5px;
+  border-radius: var(--border-radius-small);
 }
 
 .enemyShipImg {
@@ -178,86 +303,65 @@ main {
   height: 50px;
 }
 
-.enemyShip {
-  position: absolute;
-  width: 75px;
-  height: 30px;
-  background-color: transparent;
-  border-radius: 5px;
-}
-
-#gameBoard {
-  border: 1px solid black;
-  width: 1000px;
-  height: 800px;
-  background-color: black;
-}
+/* ============================================
+   LASERS
+   ============================================ */
 
 .laser {
   position: absolute;
-  width: 7px;
-  height: 30px;
-  background-color: red;
-  border-radius: 5px;
+  width: var(--laser-width);
+  height: var(--laser-height);
+  background-color: var(--color-laser-player);
+  border-radius: var(--border-radius-small);
 }
 
 .enemyLaser {
   position: absolute;
-  width: 8px;
-  height: 25px;
-  background-color: green;
-  border-radius: 5px;
+  width: var(--enemy-laser-width);
+  height: var(--enemy-laser-height);
+  background-color: var(--color-laser-enemy);
+  border-radius: var(--border-radius-small);
 }
 
-#enemies {
-  width: 1000px;
-  height: 740px;
-}
-
-.ship-row {
-  display: flex;
-  height: 25px;
-}
-
-.ship-cell {
-  height: 25px;
-  width: 25px;
-}
+/* ============================================
+   FOOTER & BUTTONS
+   ============================================ */
 
 #btns {
-  margin-left: 10px;
-  margin-top: 10px;
+  margin-left: var(--spacing-md);
+  margin-top: var(--spacing-md);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 #btns > div {
-  font-size: 1.7em;
-  border-radius: 7px;
-  padding: 5px;
-  border: 1px solid black;
+  font-size: var(--font-size-button);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-text);
   margin-right: 30px;
-  transition: 500ms;
+  transition: var(--transition-fast);
 }
 
 #btns > div:hover {
-  background-color: dimgray;
+  background-color: var(--color-hover);
   cursor: pointer;
 }
 
+/* Button focus styles for accessibility */
+#btns > div:focus {
+  outline: 3px solid var(--color-laser-player);
+  outline-offset: 2px;
+}
+
 #updateText {
-  margin-top: 10px;
+  margin-top: var(--spacing-md);
 }
 
-.blocker {
-  background-color: #00fe00;
-}
-
-.shadowBox {
-  box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+/* ============================================
+   MODAL
+   ============================================ */
 
 #modal-box {
   z-index: 1;
@@ -268,42 +372,146 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--color-modal-overlay);
 }
 
 #inner-modal-box {
   position: relative;
   text-align: center;
-  border-radius: 5px;
-  box-shadow: inset 0 0 0 4px black;
+  border-radius: var(--border-radius-small);
+  box-shadow: inset 0 0 0 4px var(--color-text);
   margin-left: 40vw;
   margin-top: 10vh;
-  background-color: azure;
+  background-color: var(--color-accent);
   width: 350px;
   height: 15vh;
 }
 
 #modal-message {
   vertical-align: middle;
-  font-family: "Roboto Mono", monospace !important;
-  font-size: xx-large;
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-size-modal);
   line-height: 15vh;
 }
 
-#close-button {
+/* ============================================
+   CANVAS (FIREWORKS)
+   ============================================ */
+
+#myCanvas {
+  display: none;
   position: absolute;
-  right: 20px;
-  top: 10px;
-  font-size: 30px;
-  font-weight: bold;
-  border-radius: 30px;
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
 }
 
-#close-button:hover {
-  cursor: pointer;
-  color: red;
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.shadowBox {
+  box-shadow: 2px 4px 8px 2px var(--color-shadow),
+    0 6px 20px 0 var(--color-shadow-dark);
 }
 
+/* Screen reader only - for accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media screen and (max-width: 1050px) {
+  :root {
+    --game-width: 95vw;
+    --game-height: calc(95vw * 0.8);
+    --enemies-height: calc(95vw * 0.74);
+    --grid-cell-size: calc(95vw / 40);
+    --font-size-title: 2rem;
+    --font-size-upgrade: 1.5rem;
+    --font-size-button: 1.3em;
+  }
+
+  #winLoss {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #winLoss h2 {
+    padding: var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+
+  #btns {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  #btns > div {
+    margin-right: 0;
+  }
+
+  .ship-row {
+    height: calc(95vw / 40);
+  }
+
+  .ship-cell {
+    height: calc(95vw / 40);
+    width: calc(95vw / 40);
+  }
+
+  #playerShipImg {
+    width: 80px;
+    height: 40px;
+  }
+
+  .enemyShipImg {
+    width: 60px;
+    height: 40px;
+  }
+
+  .enemyShip {
+    width: 60px;
+    height: 24px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  :root {
+    --font-size-title: 1.5rem;
+    --icon-size: 40px;
+  }
+
+  #githubicon,
+  #homeIcon {
+    top: 10px !important;
+  }
+
+  #inner-modal-box {
+    width: 80vw;
+    margin-left: 10vw;
+  }
+
+  #upgradeText {
+    font-size: 1rem;
+  }
+
+  #pauseText {
+    font-size: 2rem;
+  }
+}
+
+/* Level display */
+#levelDisplay {
+  font-size: 1.2em;
+  color: var(--color-accent);
+  margin-left: var(--spacing-lg);
+}
